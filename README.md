@@ -6,6 +6,8 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/rte-antares-rpackage/antaresEditObject.svg?branch=master)](https://travis-ci.org/rte-antares-rpackage/antaresEditObject)
 [![Coverage Status](https://img.shields.io/codecov/c/github/rte-antares-rpackage/antaresEditObject/master.svg)](https://codecov.io/github/rte-antares-rpackage/antaresEditObject?branch=master)
+[![version](http://www.r-pkg.org/badges/version/antaresEditObject)](https://CRAN.R-project.org/package=antaresEditObject)
+[![cran checks](https://cranchecks.info/badges/worst/antaresEditObject)](https://cranchecks.info/pkgs/antaresEditObject)
 
 
 
@@ -14,7 +16,13 @@
 This package provide methods to create (and remove) area, links between them, thermal cluster and binding constraints.
 These steps maybe usefull before running an Antares simulation.
 
-You can install the package from GitHub :
+Install from CRAN:
+
+```r
+install.packages("antaresEditObject")
+```
+
+Or install dev version from GitHub :
 
 ```r
 # with remotes

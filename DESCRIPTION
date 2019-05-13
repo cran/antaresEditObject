@@ -1,7 +1,7 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: c(
     person("Frederic", "Breant", email = "frederic.breant@rte-france.com", role = c("aut", "cre")),
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut")),
@@ -9,6 +9,7 @@ Authors@R: c(
     person("Benoit", "Thieurmel", email = "benoit.thieurmel@datastorm.fr", role = "ctb"),
     person("Titouan", "Robert", email = "titouan.robert@datastorm.fr", role = "ctb"),
     person("Jalal-Edine", "Zawam", email = "jalal-edine.zawam@rte-france.com", role = "ctb"),
+    person("Etienne", "Sanchez", role = "ctb"),
     person("RTE", role = "cph"))
 Description: Edit an 'Antares' simulation before running it : create new areas, links, thermal
     clusters or binding constraints or edit existing ones. Update 'Antares' general & optimization settings.
@@ -21,14 +22,15 @@ Depends: antaresRead
 Imports: assertthat, grDevices, data.table, whisker
 Suggests: testthat, covr
 NeedsCompilation: no
-Packaged: 2018-12-11 12:55:45 UTC; perri
+Packaged: 2019-05-13 08:16:21 UTC; perri
 Author: Frederic Breant [aut, cre],
   Victor Perrier [aut],
   Baptiste Seguinot [ctb],
   Benoit Thieurmel [ctb],
   Titouan Robert [ctb],
   Jalal-Edine Zawam [ctb],
+  Etienne Sanchez [ctb],
   RTE [cph]
 Maintainer: Frederic Breant <frederic.breant@rte-france.com>
 Repository: CRAN
-Date/Publication: 2018-12-21 15:40:03 UTC
+Date/Publication: 2019-05-13 09:10:05 UTC
