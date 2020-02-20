@@ -4,8 +4,12 @@
 \alias{runTsGenerator}
 \title{Run Time-Series Generator}
 \usage{
-runTsGenerator(path_solver = getOption("antares.solver"), wait = TRUE,
-  show_output_on_console = FALSE, opts = antaresRead::simOptions())
+runTsGenerator(
+  path_solver = getOption("antares.solver"),
+  wait = TRUE,
+  show_output_on_console = FALSE,
+  opts = antaresRead::simOptions()
+)
 }
 \arguments{
 \item{path_solver}{Character containing the Antares Solver path.}
@@ -26,6 +30,7 @@ Run Time-Series Generator
 \dontrun{
 library(antaresRead)
 setSimulationPath(path = "path/to/study")
+
 library(antaresEditObject)
 runTsGenerator(
   path_solver = "path/to/antares-6.0-solver.exe", 

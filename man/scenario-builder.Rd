@@ -7,14 +7,26 @@
 \alias{updateScenarioBuilder}
 \title{Read, create & update scenario builder}
 \usage{
-scenarioBuilder(n_scenario, n_mc = NULL, areas = NULL,
-  areas_rand = NULL, opts = antaresRead::simOptions())
+scenarioBuilder(
+  n_scenario,
+  n_mc = NULL,
+  areas = NULL,
+  areas_rand = NULL,
+  opts = antaresRead::simOptions()
+)
 
-readScenarioBuilder(ruleset = "Default Ruleset", as_matrix = TRUE,
-  opts = antaresRead::simOptions())
+readScenarioBuilder(
+  ruleset = "Default Ruleset",
+  as_matrix = TRUE,
+  opts = antaresRead::simOptions()
+)
 
-updateScenarioBuilder(ldata, ruleset = "Default Ruleset",
-  series = NULL, opts = antaresRead::simOptions())
+updateScenarioBuilder(
+  ldata,
+  ruleset = "Default Ruleset",
+  series = NULL,
+  opts = antaresRead::simOptions()
+)
 }
 \arguments{
 \item{n_scenario}{Number of scenario.}
@@ -33,8 +45,8 @@ updateScenarioBuilder(ldata, ruleset = "Default Ruleset",
 \item{as_matrix}{If \code{TRUE} (default) return a matrix, else a list.}
 
 \item{ldata}{A \code{matrix} obtained with \code{scenarioBuilder}, 
-or a named list of matrix obtained with \code{scenarioBuilder}, names must be 
-'l', 'h', 'w' or 's', depending the serie to update.}
+or a named list of matrices obtained with \code{scenarioBuilder}, names must be 
+'l', 'h', 'w', 's' or 't', depending on the series to update.}
 
 \item{series}{Name(s) of the serie(s) to update if \code{ldata} is a single \code{matrix}.}
 }

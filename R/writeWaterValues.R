@@ -3,7 +3,7 @@
 #' @param area The area where to add the water values.
 #' @param data A 365*101 numeric matrix: table of marginal values for the stored energy, which depends
 #'   on the date (365 days) and on the reservoir level (101 round percentage values ranging from
-#'   0% to 100%). OR a 3-column matrix with 365*101 rows. In this latter case the 3 columns must
+#'   0\% to 100\%). OR a 3-column matrix with 365*101 rows. In this latter case the 3 columns must
 #'   be 'date', 'level' and 'value' (in this order), and the rows must be sorted by:
 #'   ascending day, ascending level.
 #' @param overwrite Logical. Overwrite the values if a file already exists.
@@ -40,15 +40,16 @@ writeWaterValues <- function(area, data = NULL, overwrite = TRUE,
   if (isTRUE(file.size(values_file) > 0) && !overwrite)
     stop("Water values already exist for this area. Use overwrite=TRUE if you want to overwrite them.",
          call. = FALSE)
-  
+
+  if (!(identical(dim(data), c(365L, 101L)) || identical(dim(data), c(36865L, 3L))))
+    stop("'data' must be either a 365*101 or (365*101)*3 matrix.", call. = FALSE)
+
   if (ncol(data) == 3) {
     data <- data.table::data.table(data)
     names(data) <- c("date", "level", "value")
     data <- data.table::dcast(data, formula = date ~ level, value.var = "value")
+    data$date <- NULL
   }
-  
-  if (!identical(dim(data), c(365L, 101L)))
-    stop("'data' must be either a 365*101 or (365*101)*3 matrix.", call. = FALSE)
-  
+
   utils::write.table(x = data, row.names = FALSE, col.names = FALSE, sep = "\t", file = values_file)
 }

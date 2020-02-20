@@ -27,7 +27,7 @@
 #'  \item{\strong{Impedances}}{ : virtual impedances that are used in economy simulations to give a
 #'    physical meaning to raw outputs, when no binding constraints have been defined to enforce Kirchhoff's laws.}
 #'  \item{\strong{Loop flow}}{ : amount of power flowing circularly though the grid when all
-#'    “nodes” are perfectly balanced (no import and no export).}
+#'    "nodes" are perfectly balanced (no import and no export).}
 #'  \item{\strong{PST min}}{ : lower bound of phase-shifting that can be reached by a PST installed on the link, if any.}
 #'  \item{\strong{PST max}}{ : upper bound of phase-shifting that can be reached by a PST installed on the link, if any.}
 #' }
@@ -44,7 +44,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' createLink(from = "myarea", to  = "myarea2")
+#' 
+#' library(antaresRead)
+#' 
+#' # Set simulation path
+#' setSimulationPath(path = "PATH/TO/SIMULATION", simulation = "input")
+#' 
+#' # Create a link between two areas
+#' createLink(from = "first_area", to  = "second_area")
+#' 
 #' }
 createLink <- function(from, to, propertiesLink = propertiesLinkOptions(), dataLink = NULL, overwrite = FALSE, opts = antaresRead::simOptions()) {
   
@@ -119,7 +127,12 @@ createLink <- function(from, to, propertiesLink = propertiesLinkOptions(), dataL
   
   if (!identical(areas, sort(areas))) {
     dataLink[, 1:2] <- dataLink[, 2:1]
-    dataLink[, 4:5] <- dataLink[, 5:4]
+    
+    if (v7) {
+      dataLink[, 3:4] <- dataLink[, 4:3]
+    } else {
+      dataLink[, 4:5] <- dataLink[, 5:4]
+    }
   }
   
   utils::write.table(

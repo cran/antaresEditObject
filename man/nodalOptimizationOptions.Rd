@@ -4,9 +4,15 @@
 \alias{nodalOptimizationOptions}
 \title{Nodal optimization parameters for creating an area}
 \usage{
-nodalOptimizationOptions(non_dispatchable_power = TRUE,
-  dispatchable_hydro_power = TRUE, other_dispatchable_power = TRUE,
-  spread_unsupplied_energy_cost = 0, spread_spilled_energy_cost = 0)
+nodalOptimizationOptions(
+  non_dispatchable_power = TRUE,
+  dispatchable_hydro_power = TRUE,
+  other_dispatchable_power = TRUE,
+  spread_unsupplied_energy_cost = 0,
+  spread_spilled_energy_cost = 0,
+  average_unsupplied_energy_cost = 0,
+  average_spilled_energy_cost = 0
+)
 }
 \arguments{
 \item{non_dispatchable_power}{logical, default to FALSE}
@@ -18,6 +24,10 @@ nodalOptimizationOptions(non_dispatchable_power = TRUE,
 \item{spread_unsupplied_energy_cost}{numeric, default to 0}
 
 \item{spread_spilled_energy_cost}{numeric, default to 0}
+
+\item{average_unsupplied_energy_cost}{numeric, default to 0}
+
+\item{average_spilled_energy_cost}{numeric, default to 0}
 }
 \value{
 a named list

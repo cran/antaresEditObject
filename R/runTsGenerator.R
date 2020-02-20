@@ -18,7 +18,7 @@
 #' \dontrun{
 #' library(antaresRead)
 #' setSimulationPath(path = "path/to/study")
-
+#' 
 #' library(antaresEditObject)
 #' runTsGenerator(
 #'   path_solver = "path/to/antares-6.0-solver.exe", 
@@ -46,7 +46,7 @@ runTsGenerator <- function(path_solver = getOption("antares.solver"),
   
   if(version_solver != version_study){
     stop(paste0(
-      "Imcompatibility between antares solver version (", version_solver, ") and study version (", version_study, ")"
+      "Incompatibility between antares solver version (", version_solver, ") and study version (", version_study, ")"
     ), call. = FALSE)
   }
   
