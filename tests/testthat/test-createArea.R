@@ -6,7 +6,7 @@ context("Function createArea")
 sapply(studies, function(study) {
   
   setup_study(study, sourcedir)
-  opts <- antaresRead::setSimulationPath(studyPath)
+  opts <- antaresRead::setSimulationPath(studyPath, 1)
   
   
   test_that("Cannot initialize a new area if not in 'Input' mode", {
@@ -80,7 +80,7 @@ sapply(studies, function(study) {
   })
   
   # remove temporary study
-  unlink(x = file.path(path, "test_case"), recursive = TRUE)
+  unlink(x = file.path(pathstd, "test_case"), recursive = TRUE)
   
 })
 

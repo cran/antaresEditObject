@@ -1,3 +1,23 @@
+# antaresEditObject 0.2.2
+
+* New usage `getPlaylist` : V8 antares ponderation.
+* New usage `setPlaylist` : V8 antares ponderation.
+
+# antaresEditObject 0.2.1
+
+* New function `copyOutput` : to copy antares output with extansion.
+* New function `writeOutputValues` : to write antares data after `antaresRead` (areas, links and clusters).
+* New function `computeTimeStampFromHourly` : to write mc-ind data from hourly files (daily, weekly, monthly and annual).
+* New function `parAggregateMCall` : to compute mc-all from md-ind. 
+* New function `editArea` : to edit area
+* New function `editBindingConstraint` : to edit Binding Constraint
+
+# antaresEditObject 0.2.0
+
+* New template in `createStudy()` for Antares version >= 7.1.0
+
+
+
 # antaresEditObject 0.1.9
 
 * New function `writeSeriesPrepro()`: to write load, wind and solar prepro data.
