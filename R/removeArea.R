@@ -21,16 +21,16 @@ removeArea <- function(name, opts = antaresRead::simOptions()) {
   list_name <- name
   name <- tolower(name)
   
-  if (!name %in% opts$areaList)
-    stop(paste(name, "is not a valid area"))
+  check_area_name(name, opts)
 
   # Input path
   inputPath <- opts$inputPath
 
   # Update area list
   areas <- readLines(file.path(inputPath, "areas/list.txt"))
-  areas <- setdiff(areas, list_name)
   areas <- areas[!duplicated(areas)]
+  index_to_remove <- match(name, tolower(areas))
+  areas <- areas[-index_to_remove]
   areas <- paste(sort(areas), collapse = "\n")
   writeLines(text = areas, con = file.path(inputPath, "areas/list.txt"))
 

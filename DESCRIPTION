@@ -1,7 +1,7 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 0.2.2
+Version: 0.3.0
 Authors@R: c(
     person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
     person("Frederic", "Breant", role = "aut"),
@@ -17,15 +17,17 @@ Description: Edit an 'Antares' simulation before running it : create new areas, 
     clusters or binding constraints or edit existing ones. Update 'Antares' general & optimization settings.
     'Antares' is an open source power system generator, more information available here : <https://antares-simulator.org/>.
 License: GPL (>= 2) | file LICENSE
+URL: https://github.com/rte-antares-rpackage/antaresEditObject
+BugReports: https://github.com/rte-antares-rpackage/antaresEditObject/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: antaresRead (>= 2.2.7)
-Imports: assertthat, grDevices, data.table, whisker, fs, doParallel,
+Imports: assertthat, grDevices, data.table, whisker, doParallel,
         pbapply, parallel
 Suggests: testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2021-06-21 15:07:36 UTC; bthie
+Packaged: 2021-11-08 10:20:09 UTC; perri
 Author: Veronique Bachelier [aut, cre],
   Frederic Breant [aut],
   Victor Perrier [aut],
@@ -38,4 +40,4 @@ Author: Veronique Bachelier [aut, cre],
   RTE [cph]
 Maintainer: Veronique Bachelier <veronique.bachelier@rte-france.com>
 Repository: CRAN
-Date/Publication: 2021-06-21 16:00:07 UTC
+Date/Publication: 2021-11-08 11:30:02 UTC
