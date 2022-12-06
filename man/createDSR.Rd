@@ -25,7 +25,7 @@ editDSR(
 )
 }
 \arguments{
-\item{areasAndDSRParam}{A data.frame with 4 columns \code{area}, \code{unit},
+\item{areasAndDSRParam}{A \code{data.frame} with 4 columns \code{area}, \code{unit},
 \code{nominalCapacity}, \code{marginalCost} and \code{hour}.
 Hour represent the number of activation hours for the DSR per day.}
 
@@ -35,7 +35,7 @@ Hour represent the number of activation hours for the DSR per day.}
 This will overwrite the previous area and links.}
 
 \item{opts}{List of simulation parameters returned by the function
-\code{antaresRead::setSimulationPath}}
+\code{\link[antaresRead:setSimulationPath]{antaresRead::setSimulationPath()}}}
 
 \item{area}{an area where to edit the DSR}
 
@@ -46,21 +46,24 @@ This will overwrite the previous area and links.}
 \item{marginalCost}{DSR marginalCost}
 }
 \value{
-\code{createDSR()} and \code{editDSR()}  returns an updated list containing various information about the simulation.
+An updated list containing various information about the simulation.
 
 \code{getCapacityDSR()} returns DSR capacity (unit * nominalCapacity of virtual cluster) of the area
 }
 \description{
+\ifelse{html}{\figure{badge_api_ok.svg}{options: alt='Antares API OK'}}{Antares API: \strong{OK}}
+
 Create a Demand Side Response (DSR)
 }
 \examples{
 \dontrun{
 
 library(antaresEditObject)
-path<-pathToYourStudy
-opts<-setSimulationPath(path, simulation = "input")
-area, unit, nominalCapacity and marginalCost
-dsrData<-data.frame(area = c("a", "b"), unit = c(10,20), 
+path <- pathToYourStudy
+opts <- setSimulationPath(path, simulation = "input")
+
+# area, unit, nominalCapacity and marginalCost
+dsrData <- data.frame(area = c("a", "b"), unit = c(10,20), 
                     nominalCapacity = c(100, 120), marginalCost = c(52, 65), hour = c(3, 7))
 
 createDSR(dsrData)

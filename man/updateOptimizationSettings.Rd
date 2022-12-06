@@ -29,7 +29,8 @@ updateOptimizationSettings(
 \arguments{
 \item{simplex.range}{week or day}
 
-\item{transmission.capacities}{true, false or infinite}
+\item{transmission.capacities}{true, false or infinite (since v8.4 can also take : local-values,
+null-for-all-links, infinite-for-all-links, null-for-physical-links, infinite-for-physical-links)}
 
 \item{include.constraints}{true or false}
 
@@ -47,7 +48,7 @@ updateOptimizationSettings(
 
 \item{include.primaryreserve}{true or false}
 
-\item{include.exportmps}{true or false}
+\item{include.exportmps}{true or false (since v8.3.2 can take also : none, optim-1, optim-2, both-optims)}
 
 \item{power.fluctuations}{free modulations, minimize excursions or minimize ramping}
 
@@ -64,11 +65,23 @@ updateOptimizationSettings(
 \item{day.ahead.reserve.management}{global}
 
 \item{opts}{List of simulation parameters returned by the function
-\code{antaresRead::setSimulationPath}}
+\code{\link[antaresRead:setSimulationPath]{antaresRead::setSimulationPath()}}}
 }
 \value{
-An updated list containing various information about the simulation options.
+An updated list containing various information about the simulation.
 }
 \description{
-Update optimization parameters of an Antares study
+\ifelse{html}{\figure{badge_api_ok.svg}{options: alt='Antares API OK'}}{Antares API: \strong{OK}}
+
+Update optimization parameters and other preferences of an Antares study
+}
+\examples{
+\dontrun{
+
+updateOptimizationSettings(
+  simplex.range = "week", 
+  power.fluctuations = "minimize ramping"
+)
+
+}
 }

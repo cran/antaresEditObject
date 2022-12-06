@@ -26,6 +26,15 @@ createArea("moon")
 createCluster(area = "moon", cluster_name = "tranquility", add_prefix = FALSE)
 createCluster(area = "moon", cluster_name = "serenety", add_prefix = FALSE)
 
+# More areas
+createArea("titan")
+createArea("ceres")
+
+# Some links
+createLink("earth", "moon")
+createLink("moon", "titan")
+createLink("moon", "ceres")
+
 # Check what we have created
 getAreas()
 readClusterDesc()
@@ -93,6 +102,21 @@ updateScenarioBuilder(
   )
 )
 readScenarioBuilder()$t
+
+## -----------------------------------------------------------------------------
+updateScenarioBuilder(
+  ldata = my_scenario, 
+  series = "ntc"
+)
+readScenarioBuilder()$ntc
+
+## -----------------------------------------------------------------------------
+updateScenarioBuilder(
+  ldata = my_scenario, 
+  series = "ntc",
+  links = "moon%ceres"
+)
+readScenarioBuilder()$ntc
 
 ## -----------------------------------------------------------------------------
 clearScenarioBuilder()

@@ -9,50 +9,60 @@ createLink(
   to,
   propertiesLink = propertiesLinkOptions(),
   dataLink = NULL,
+  tsLink = NULL,
   overwrite = FALSE,
   opts = antaresRead::simOptions()
 )
 }
 \arguments{
-\item{from}{The first area from which to create a link}
-
-\item{to}{The second one}
+\item{from, to}{The two areas linked together.}
 
 \item{propertiesLink}{a named list containing the link properties, e.g. hurdles-cost
-or transmission-capacities for example. See \code{\link{propertiesLinkOptions}}.}
+or transmission-capacities for example. See \code{\link[=propertiesLinkOptions]{propertiesLinkOptions()}}.}
 
-\item{dataLink}{For Antares v7, a matrix with eight column corresponding to : trans. capacity (direct)
-trans. capacity (indirect), hurdles cost (direct), hurdles cost (indirect), impedances, loop flow,
-PST min, PST max.
-If \code{NULL} (default), a matrix whose rows are equal to \code{1, 1, 0, 0, 0, 0, 0, 0} is set. See Details}
+\item{dataLink}{See Details section below.}
+
+\item{tsLink}{Transmission capacities time series. First N columns are direct TS, following N are indirect ones.}
 
 \item{overwrite}{Logical, overwrite the previous between the two areas if exist}
 
 \item{opts}{List of simulation parameters returned by the function
-\code{antaresRead::setSimulationPath}}
+\code{\link[antaresRead:setSimulationPath]{antaresRead::setSimulationPath()}}}
 }
 \value{
 An updated list containing various information about the simulation.
 }
 \description{
-Create a link between two areas
+\ifelse{html}{\figure{badge_api_ok.svg}{options: alt='Antares API OK'}}{Antares API: \strong{OK}}
+
+Create a new link between two areas in an Antares study.
 }
 \details{
-The eight times-series are:
+The eight potential times-series are:
 \itemize{
-\item \strong{NTC direct} : the upstream-to-downstream capacity, in MW
-\item \strong{NTC indirect} : the downstream-to-upstream capacity, in MW
-\item \strong{Hurdle cost direct} : an upstream-to-downstream transmission fee, in euro/MWh
-\item \strong{Hurdle cost indirect} : a downstream-to-upstream transmission fee, in euro/MWh
-\item \strong{Impedances} : virtual impedances that are used in economy simulations to give a physical meaning to raw outputs, when no binding constraints have been defined to enforce Kirchhoff's laws.
-\item \strong{Loop flow} : amount of power flowing circularly though the grid when all "nodes" are perfectly balanced (no import and no export).
-\item \strong{PST min} : lower bound of phase-shifting that can be reached by a PST installed on the link, if any.
-\item \strong{PST max} : upper bound of phase-shifting that can be reached by a PST installed on the link, if any.
+\item \strong{NTC direct} : the upstream-to-downstream capacity, in MW. Default to \code{1}.
+\item \strong{NTC indirect} : the downstream-to-upstream capacity, in MW. Default to \code{1}.
+\item \strong{Hurdle cost direct} : an upstream-to-downstream transmission fee, in euro/MWh. Default to \code{0}.
+\item \strong{Hurdle cost indirect} : a downstream-to-upstream transmission fee, in euro/MWh. Default to \code{0}.
+\item \strong{Impedances} : virtual impedances that are used in economy simulations to give a physical meaning to raw outputs,
+when no binding constraints have been defined to enforce Kirchhoff's laws. Default to \code{0}.
+\item \strong{Loop flow} : amount of power flowing circularly though the grid when all "nodes" are perfectly balanced (no import and no export). Default to \code{0}.
+\item \strong{PST min} : lower bound of phase-shifting that can be reached by a PST installed on the link, if any. Default to \code{0}.
+\item \strong{PST max} : upper bound of phase-shifting that can be reached by a PST installed on the link, if any. Default to \code{0}.
 }
 
-NB: For Antares v7 the eight columns must conform to above order. For Antares v6, only five columns are
-expected, and they must follow this other order: NTC direct, NTC indirect, Impedances, Hurdle cost direct,
+According to Antares version, usage may vary :
+
+\strong{< v7.0.0} : 5 first columns are used in the following order: NTC direct, NTC indirect, Impedances, Hurdle cost direct,
 Hurdle cost indirect.
+
+\strong{>= v7.0.0} : 8 columns in order above are expected.
+
+\strong{>= v8.2.0} : there's 2 cases :
+\itemize{
+\item 8 columns are provided: 2 first are used in \code{tsLink}, other 6 are used for link data
+\item 6 columns are provided: you must provide NTC data in \code{tsLink} argument.
+}
 }
 \note{
 In Antares, areas are sorted in alphabetical order to establish links between.
@@ -72,4 +82,7 @@ setSimulationPath(path = "PATH/TO/SIMULATION", simulation = "input")
 createLink(from = "first_area", to  = "second_area")
 
 }
+}
+\seealso{
+\code{\link[=editLink]{editLink()}}, \code{\link[=removeLink]{removeLink()}}
 }

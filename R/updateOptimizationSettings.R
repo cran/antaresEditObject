@@ -1,7 +1,13 @@
-#' Update optimization parameters of an Antares study
+#' @title Update optimization parameters of an Antares study
+#' 
+#' @description 
+#' `r antaresEditObject:::badge_api_ok()`
+#' 
+#' Update optimization parameters and other preferences of an Antares study
 #'
 #' @param simplex.range week or day
-#' @param transmission.capacities true, false or infinite
+#' @param transmission.capacities true, false or infinite (since v8.4 can also take : local-values, 
+#' null-for-all-links, infinite-for-all-links, null-for-physical-links, infinite-for-physical-links)
 #' @param include.constraints true or false
 #' @param include.hurdlecosts true or false
 #' @param include.tc.min.stable.power true or false
@@ -10,7 +16,7 @@
 #' @param include.strategicreserve true or false
 #' @param include.spinningreserve true or false
 #' @param include.primaryreserve true or false
-#' @param include.exportmps true or false
+#' @param include.exportmps true or false (since v8.3.2 can take also : none, optim-1, optim-2, both-optims)
 #' @param power.fluctuations free modulations, minimize excursions or minimize ramping
 #' @param shedding.strategy share margins
 #' @param shedding.policy shave peaks or minimize duration
@@ -18,18 +24,24 @@
 #' @param number.of.cores.mode minimum, low, medium, high or maximum
 #' @param renewable.generation.modelling aggregated or clusters
 #' @param day.ahead.reserve.management global
-#' @param opts
-#'   List of simulation parameters returned by the function
-#'   \code{antaresRead::setSimulationPath}
+#' 
+#' @template opts
 #'
-#' @return An updated list containing various information about the simulation options.
 #' @export
 #'
 #' @importFrom utils modifyList
 #' @importFrom assertthat assert_that
 #' @importFrom antaresRead setSimulationPath
 #'
-# @examples
+#' @examples
+#' \dontrun{
+#' 
+#' updateOptimizationSettings(
+#'   simplex.range = "week", 
+#'   power.fluctuations = "minimize ramping"
+#' )
+#' 
+#' }
 updateOptimizationSettings <- function(simplex.range = NULL,
                                        transmission.capacities = NULL,
                                        include.constraints = NULL,
@@ -49,13 +61,23 @@ updateOptimizationSettings <- function(simplex.range = NULL,
                                        renewable.generation.modelling = NULL,
                                        day.ahead.reserve.management = NULL,
                                        opts = antaresRead::simOptions()) {
-  assertthat::assert_that(class(opts) == "simOptions")
+  assertthat::assert_that(inherits(opts, "simOptions"))
   
   # check inputs
   if (!is.null(simplex.range))
     assertthat::assert_that(simplex.range %in% c("week", "day"))
   if (!is.null(transmission.capacities))
-    assertthat::assert_that(transmission.capacities %in% c("true", "false", "infinite"))
+    if (opts$antaresVersion >= 840){
+      assertthat::assert_that(transmission.capacities %in% c("true", "false", "infinite",
+                                                             "local-values", "null-for-all-links", "infinite-for-all-links",
+                                                             "null-for-physical-links", "infinite-for-physical-links"))
+      if (transmission.capacities == "true") transmission.capacities <- "local-values"
+      else if (transmission.capacities == "false") transmission.capacities <- "null-for-all-links"
+      else if (transmission.capacities == "infinite") transmission.capacities <- "infinite-for-all-links"
+    } else {
+      assertthat::assert_that(transmission.capacities %in% c("true", "false", "infinite"))
+      
+    }
   if (!is.null(include.constraints))
     assertthat::assert_that(include.constraints %in% c("true", "false"))
   if (!is.null(include.hurdlecosts))
@@ -72,8 +94,17 @@ updateOptimizationSettings <- function(simplex.range = NULL,
     assertthat::assert_that(include.spinningreserve %in% c("true", "false"))
   if (!is.null(include.primaryreserve))
     assertthat::assert_that(include.primaryreserve %in% c("true", "false"))
-  if (!is.null(include.exportmps))
-    assertthat::assert_that(include.exportmps %in% c("true", "false"))
+  if (!is.null(include.exportmps)){
+    if (opts$antaresVersion >= 832){
+      assertthat::assert_that(include.exportmps %in% c("true", "false",
+                                                       "none", "optim-1", "optim-2", "both-optims"))
+      if (include.exportmps == "true") include.exportmps <- "both-optims"
+      else if (include.exportmps == "false") include.exportmps <- "none"
+    } else {
+      assertthat::assert_that(include.exportmps %in% c("true", "false"))
+    }
+  }
+
   
   if (!is.null(power.fluctuations))
     assertthat::assert_that(
@@ -96,15 +127,7 @@ updateOptimizationSettings <- function(simplex.range = NULL,
     assertthat::assert_that(day.ahead.reserve.management %in% c("global"))
   
   
-  # read
-  generaldatapath <- file.path(opts$studyPath, "settings", "generaldata.ini")
-  generaldata <- readIniFile(file = generaldatapath)
-  
-  # update
-  l_optimization <- generaldata$optimization
-  l_others <- generaldata$`other preferences`
-  
-  new_params_optimization <- list(
+  new_params_optimization <- dropNulls(list(
     simplex.range = simplex.range,
     transmission.capacities = transmission.capacities,
     include.constraints = include.constraints,
@@ -116,11 +139,13 @@ updateOptimizationSettings <- function(simplex.range = NULL,
     include.spinningreserve = include.spinningreserve,
     include.primaryreserve = include.primaryreserve,
     include.exportmps = include.exportmps
-  )
+  ))
+  for (i in seq_along(new_params_optimization)) {
+    new_params_optimization[[i]] <- as.character(new_params_optimization[[i]])
+    names(new_params_optimization)[i] <- dicoOptimizationSettings(names(new_params_optimization)[i])
+  }
   
-  new_params_optimization <- dropNulls(new_params_optimization)
-  
-  new_params_others <- list(
+  new_params_others <- dropNulls(list(
     power.fluctuations = power.fluctuations,
     shedding.strategy = shedding.strategy,
     shedding.policy = shedding.policy,
@@ -128,41 +153,62 @@ updateOptimizationSettings <- function(simplex.range = NULL,
     number.of.cores.mode = number.of.cores.mode,
     renewable.generation.modelling = renewable.generation.modelling,
     day.ahead.reserve.management = day.ahead.reserve.management
-  )
-  
-  new_params_others <- dropNulls(new_params_others)
-  
-  for (i in seq_along(new_params_optimization)) {
-    new_params_optimization[[i]] <-
-      as.character(new_params_optimization[[i]])
-    names(new_params_optimization)[i] <-
-      dicoOptimizationSettings(names(new_params_optimization)[i])
-  }
-  
+  ))
   for (i in seq_along(new_params_others)) {
     new_params_others[[i]] <- as.character(new_params_others[[i]])
-    names(new_params_others)[i] <-
-      dicoOptimizationSettings(names(new_params_others)[i])
+    names(new_params_others)[i] <- dicoOptimizationSettings(names(new_params_others)[i])
   }
   
-  l_optimization <-
-    utils::modifyList(x = l_optimization, val = new_params_optimization)
-  l_others <-
-    utils::modifyList(x = l_others, val = new_params_others)
+  
+  # API block
+  if (is_api_study(opts)) {
+    
+    if (length(new_params_optimization) > 0) {
+      writeIni(
+        listData = new_params_optimization,
+        pathIni = "settings/generaldata/optimization",
+        opts = opts
+      )
+    }
+    
+    if (length(new_params_others) > 0) {
+      writeIni(
+        listData = new_params_others,
+        pathIni = "settings/generaldata/other preferences",
+        opts = opts
+      )
+    }
+    
+    return(update_api_opts(opts))
+  }
+  
+  
+  # read
+  generaldatapath <- file.path(opts$studyPath, "settings", "generaldata.ini")
+  generaldata <- readIniFile(file = generaldatapath)
+  
+  # previous parameters
+  l_optimization <- generaldata$optimization
+  l_others <- generaldata$`other preferences`
+  
+  
+  l_optimization <- utils::modifyList(x = l_optimization, val = new_params_optimization)
+  l_others <- utils::modifyList(x = l_others, val = new_params_others)
   
   generaldata$optimization <- l_optimization
   generaldata$`other preferences` <- l_others
   
   
   # write
-  writeIni(listData = generaldata,
-           pathIni = generaldatapath,
-           overwrite = TRUE)
+  writeIni(
+    listData = generaldata,
+    pathIni = generaldatapath,
+    overwrite = TRUE
+  )
   
   # Maj simulation
   suppressWarnings({
-    res <-
-      antaresRead::setSimulationPath(path = opts$studyPath, simulation = "input")
+    res <- antaresRead::setSimulationPath(path = opts$studyPath, simulation = "input")
   })
   
   invisible(res)

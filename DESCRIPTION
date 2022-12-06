@@ -1,7 +1,7 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
     person("Frederic", "Breant", role = "aut"),
@@ -20,14 +20,14 @@ License: GPL (>= 2) | file LICENSE
 URL: https://github.com/rte-antares-rpackage/antaresEditObject
 BugReports: https://github.com/rte-antares-rpackage/antaresEditObject/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.2
-Depends: antaresRead (>= 2.2.7)
-Imports: assertthat, grDevices, data.table, whisker, doParallel,
-        pbapply, parallel
+RoxygenNote: 7.2.2
+Depends: antaresRead (>= 2.2.95)
+Imports: assertthat, cli, data.table, httr, grDevices, jsonlite,
+        whisker, doParallel, pbapply, parallel
 Suggests: testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2021-11-08 10:20:09 UTC; perri
+Packaged: 2022-12-06 14:06:49 UTC; mansouriass
 Author: Veronique Bachelier [aut, cre],
   Frederic Breant [aut],
   Victor Perrier [aut],
@@ -40,4 +40,4 @@ Author: Veronique Bachelier [aut, cre],
   RTE [cph]
 Maintainer: Veronique Bachelier <veronique.bachelier@rte-france.com>
 Repository: CRAN
-Date/Publication: 2021-11-08 11:30:02 UTC
+Date/Publication: 2022-12-06 15:10:02 UTC

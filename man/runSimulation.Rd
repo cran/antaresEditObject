@@ -11,11 +11,12 @@ runSimulation(
   wait = TRUE,
   show_output_on_console = FALSE,
   parallel = TRUE,
+  ...,
   opts = antaresRead::simOptions()
 )
 }
 \arguments{
-\item{name}{Name of the simulation.}
+\item{name}{Name of the simulation. In API mode, \code{name} will be used as \code{output_suffix} argument.}
 
 \item{mode}{Simulation mode, can take value "economy", "adequacy" or "draft".}
 
@@ -31,14 +32,20 @@ it on the R console.}
 only with ANTARES v6.0.0 or more). In that case, the number of cores used by the simulation
 is the one set in advanced_settings/simulation_cores (see ANTARES interface).}
 
+\item{...}{Additional arguments (API only), such as \code{nb_cpu}, \code{time_limit}, ...
+See API documentation for all available options.}
+
 \item{opts}{List of simulation parameters returned by the function
-\code{antaresRead::setSimulationPath}}
+\code{\link[antaresRead:setSimulationPath]{antaresRead::setSimulationPath()}}}
 }
 \value{
-The function does not return anything. It is  used to launch an
-ANTARES simulation
+In API mode it return a \code{list} with either the job id in case of success of
+the command or details about the error produce.
+In non-API mode the function does not return anything, it is  used to launch an
+ANTARES simulation.
 }
 \description{
-\code{run_simulation} is a function which runs an ANTARES study
-in economic mode
+\ifelse{html}{\figure{badge_api_ok.svg}{options: alt='Antares API OK'}}{Antares API: \strong{OK}}
+
+Run an ANTARES study
 }

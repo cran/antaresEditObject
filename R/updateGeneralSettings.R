@@ -1,3 +1,8 @@
+#' @title Update general parameters of an Antares study
+#' 
+#' @description 
+#' `r antaresEditObject:::badge_api_ok()`
+#' 
 #' Update general parameters of an Antares study
 #'
 #' @param mode Economy, Adequacy, Draft.
@@ -33,11 +38,9 @@
 #' @param refreshintervalthermal See Antares General Reference Guide.
 #' @param refreshintervalsolar See Antares General Reference Guide.
 #' @param readonly See Antares General Reference Guide.
-#' @param opts
-#'   List of simulation parameters returned by the function
-#'   [antaresRead::setSimulationPath()]
-#'
-#' @return An updated list containing various information about the simulation.
+#' 
+#' @template opts
+#' 
 #' @export
 #' 
 #' @importFrom utils modifyList
@@ -87,19 +90,17 @@ updateGeneralSettings <- function(mode = NULL,
                                   readonly = NULL,
                                   opts = antaresRead::simOptions()) {
   
-  assertthat::assert_that(class(opts) == "simOptions")
-  
-  # read current settings
-  generaldatapath <- file.path(opts$studyPath, "settings", "generaldata.ini")
-  generaldata <- readIniFile(file = generaldatapath)
-  
-  # update general field
-  l_general <- generaldata$general
+  assertthat::assert_that(inherits(opts, "simOptions"))
   
   intra.modal <- check_param_modal(intra.modal, opts)
   inter.modal <- check_param_modal(inter.modal, opts)
+  
   generate <- check_param_RES(generate, opts)
   refreshtimeseries <- check_param_RES(refreshtimeseries, opts)
+  
+  generate <- check_param_links(generate, opts)
+  refreshtimeseries <- check_param_links(refreshtimeseries, opts)
+  readonly <- check_param_links(readonly, opts)
   
   new_params <- list(
     mode = mode,
@@ -135,14 +136,30 @@ updateGeneralSettings <- function(mode = NULL,
   )
   new_params <- dropNulls(new_params)
   for (i in seq_along(new_params)) {
-    new_params[[i]] <- as.character(new_params[[i]])
+    new_params[[i]] <- paste(as.character(new_params[[i]]), collapse = ", ")
     names(new_params)[i] <- dicoGeneralSettings(names(new_params)[i])
   }
+  
+  # API block
+  if (is_api_study(opts)) {
+
+    writeIni(listData = new_params, pathIni = "settings/generaldata/general", opts = opts)
+    
+    return(update_api_opts(opts))
+  }
+  
+  # read current settings
+  generaldatapath <- file.path(opts$studyPath, "settings", "generaldata.ini")
+  generaldata <- readIniFile(file = generaldatapath)
+  
+  # update general field
+  l_general <- generaldata$general
+  
   l_general <- utils::modifyList(x = l_general, val = new_params)
   generaldata$general <- l_general
   
   # write
-  writeIni(listData = generaldata, pathIni = generaldatapath, overwrite = TRUE)
+  writeIni(listData = generaldata, pathIni = generaldatapath, overwrite = TRUE, opts = opts)
   
   # Maj simulation
   suppressWarnings({
@@ -157,9 +174,9 @@ check_param_modal <- function(x, opts) {
     return(NULL)
   name <- deparse(substitute(x))
   if (is_active_RES(opts)) {
-    possible_values <- c("load", "hydro", "thermal", "renewables")
+    possible_values <- c("load", "hydro", "thermal", "renewables", "ntc")
   } else {
-    possible_values <- c("load", "hydro", "wind", "thermal", "solar")
+    possible_values <- c("load", "hydro", "wind", "thermal", "solar", "ntc")
   }
   if (!all(x %in% possible_values)) {
     warning(
@@ -167,6 +184,22 @@ check_param_modal <- function(x, opts) {
       paste(possible_values, collapse = ", "), 
       call. = FALSE
     )
+  }
+  if (!is_antares_v820(opts)) {
+    if (isTRUE("ntc" %in% x)) {
+      warning(
+        "updateGeneralSettings: '", name, "' parameter cannot be set to 'ntc' with Antares < 820" ,
+        call. = FALSE
+      )
+      x <- setdiff(x, "ntc")
+    }
+  }
+  if (identical(name, "inter.modal") & isTRUE("ntc" %in% x)) {
+    warning(
+      "updateGeneralSettings: '", name, "' parameter cannot be set to 'ntc', it'll be ignored." ,
+      call. = FALSE
+    )
+    x <- setdiff(x, "ntc")
   }
   return(x)
 }
@@ -184,6 +217,18 @@ check_param_RES <- function(x, opts) {
   return(x)
 }
 
+check_param_links <- function(x, opts) {
+  if (is.null(x))
+    return(NULL)
+  name <- deparse(substitute(x))
+  if (isTRUE("links" %in% x)) {
+    warning(
+      "updateGeneralSettings: '", name, "' parameter should not contain 'links'", 
+      call. = FALSE
+    )
+  }
+  return(x)
+}
 
 #' Correspondence between arguments of \code{updateGeneralSettings} and actual Antares parameters.
 #' 

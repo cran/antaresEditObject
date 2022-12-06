@@ -27,6 +27,7 @@ updateScenarioBuilder(
   ruleset = "Default Ruleset",
   series = NULL,
   clusters_areas = NULL,
+  links = NULL,
   opts = antaresRead::simOptions()
 )
 
@@ -53,13 +54,17 @@ clearScenarioBuilder(
 
 \item{ldata}{A \code{matrix} obtained with \code{scenarioBuilder},
 or a named list of matrices obtained with \code{scenarioBuilder}, names must be
-'l', 'h', 'w', 's', 't' or 'r', depending on the series to update.}
+'l', 'h', 'w', 's', 't', 'r' or 'ntc', depending on the series to update.}
 
 \item{series}{Name(s) of the serie(s) to update if \code{ldata} is a single \code{matrix}.}
 
 \item{clusters_areas}{A \code{data.table} with two columns \code{area} and \code{cluster}
 to identify area/cluster couple to update for thermal or renewable series.
 Default is to read clusters description and update all couples area/cluster.}
+
+\item{links}{Links to use if series is \code{"ntc"}.
+Either a simple vector with links described as \verb{"area01\%area02} or a \code{data.table} with two columns \code{from} and \code{to}.
+Default is to read existing links and update them all.}
 }
 \value{
 \code{scenarioBuilder} : a \code{matrix}
@@ -67,7 +72,12 @@ Default is to read clusters description and update all couples area/cluster.}
 \code{readScenarioBuilder} : a \code{list} of \code{matrix} or \code{list} according to \code{as_matrix} parameters.
 }
 \description{
-Read, create & update scenario builder
+\ifelse{html}{\figure{badge_api_ok.svg}{options: alt='Antares API OK'}}{Antares API: \strong{OK}}
+
+Read, create & update scenario builder.
+}
+\note{
+\code{series = "ntc"} is only available with Antares >= 8.2.0.
 }
 \examples{
 \dontrun{
