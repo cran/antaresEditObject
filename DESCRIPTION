@@ -1,7 +1,7 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
     person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
     person("Frederic", "Breant", role = "aut"),
@@ -12,6 +12,7 @@ Authors@R: c(
     person("Jalal-Edine", "Zawam", role = "ctb"),
     person("Etienne", "Sanchez", role = "ctb"),
     person("Janus", "De Bondt", role = "ctb"),
+    person("Assil", "Mansouri", role = "ctb"),
     person("RTE", role = "cph"))
 Description: Edit an 'Antares' simulation before running it : create new areas, links, thermal
     clusters or binding constraints or edit existing ones. Update 'Antares' general & optimization settings.
@@ -21,13 +22,14 @@ URL: https://github.com/rte-antares-rpackage/antaresEditObject
 BugReports: https://github.com/rte-antares-rpackage/antaresEditObject/issues
 Encoding: UTF-8
 RoxygenNote: 7.2.2
-Depends: antaresRead (>= 2.2.95)
+Depends: antaresRead (>= 2.4.2)
 Imports: assertthat, cli, data.table, httr, grDevices, jsonlite,
-        whisker, doParallel, pbapply, parallel
+        whisker, doParallel, doFuture, memuse, progressr, pbapply,
+        parallel, future, plyr, yaml
 Suggests: testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-12-06 14:06:49 UTC; mansouriass
+Packaged: 2023-03-10 17:19:06 UTC; mansouriass
 Author: Veronique Bachelier [aut, cre],
   Frederic Breant [aut],
   Victor Perrier [aut],
@@ -37,7 +39,8 @@ Author: Veronique Bachelier [aut, cre],
   Jalal-Edine Zawam [ctb],
   Etienne Sanchez [ctb],
   Janus De Bondt [ctb],
+  Assil Mansouri [ctb],
   RTE [cph]
 Maintainer: Veronique Bachelier <veronique.bachelier@rte-france.com>
 Repository: CRAN
-Date/Publication: 2022-12-06 15:10:02 UTC
+Date/Publication: 2023-03-10 22:00:05 UTC

@@ -118,17 +118,17 @@ createCluster(
 )
 getVariantCommands(last = 2)
 
-## ----edit_cluster-------------------------------------------------------------
-createCluster(
-  area = "area02", 
-  cluster_name = "clus02"
-)
-editCluster(
-  area = "area02", 
-  cluster_name = "clus02", 
-  unitcount = 5L
-)
-getVariantCommands(last = TRUE)
+## ----edit_cluster, eval = FALSE-----------------------------------------------
+#  createCluster(
+#    area = "area02",
+#    cluster_name = "clus02"
+#  )
+#  editCluster(
+#    area = "area02",
+#    cluster_name = "clus02",
+#    unitcount = 5L
+#  )
+#  getVariantCommands(last = TRUE)
 
 ## ----remove_cluster-----------------------------------------------------------
 createCluster(
