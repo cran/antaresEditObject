@@ -6,6 +6,8 @@ knitr::opts_chunk$set(
 )
 
 ## ----setup--------------------------------------------------------------------
+ # CRAN limite CPU usage
+data.table::setDTthreads(2)
 library(antaresEditObject)
 
 ## -----------------------------------------------------------------------------

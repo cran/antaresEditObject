@@ -1,9 +1,9 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 0.5.1
+Version: 0.6.0
 Authors@R: c(
-    person("Veronique", "Bachelier", email = "veronique.bachelier@rte-france.com", role = c("aut", "cre")),
+    person("Tatiana", "Vargas", email = "tatiana.vargas@rte-france.com", role = c("aut", "cre")),
     person("Frederic", "Breant", role = "aut"),
     person("Victor", "Perrier", role = c("aut")),
     person("Baptiste", "Seguinot", role = "ctb"),
@@ -13,6 +13,8 @@ Authors@R: c(
     person("Etienne", "Sanchez", role = "ctb"),
     person("Janus", "De Bondt", role = "ctb"),
     person("Assil", "Mansouri", role = "ctb"),
+    person("Abdallah", "Mahoudi", role = "ctb"),
+    person("Clement", "Berthet", role = "ctb"),
     person("RTE", role = "cph"))
 Description: Edit an 'Antares' simulation before running it : create new areas, links, thermal
     clusters or binding constraints or edit existing ones. Update 'Antares' general & optimization settings.
@@ -29,8 +31,8 @@ Imports: assertthat, cli, data.table, httr, grDevices, jsonlite,
 Suggests: testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2023-04-06 09:36:59 UTC; berthetcle
-Author: Veronique Bachelier [aut, cre],
+Packaged: 2023-10-03 12:37:34 UTC; berthetcle
+Author: Tatiana Vargas [aut, cre],
   Frederic Breant [aut],
   Victor Perrier [aut],
   Baptiste Seguinot [ctb],
@@ -40,7 +42,9 @@ Author: Veronique Bachelier [aut, cre],
   Etienne Sanchez [ctb],
   Janus De Bondt [ctb],
   Assil Mansouri [ctb],
+  Abdallah Mahoudi [ctb],
+  Clement Berthet [ctb],
   RTE [cph]
-Maintainer: Veronique Bachelier <veronique.bachelier@rte-france.com>
+Maintainer: Tatiana Vargas <tatiana.vargas@rte-france.com>
 Repository: CRAN
-Date/Publication: 2023-04-06 11:00:06 UTC
+Date/Publication: 2023-10-03 21:50:11 UTC

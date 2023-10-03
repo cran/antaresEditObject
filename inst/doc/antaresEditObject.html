@@ -151,7 +151,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="prerequisites" class="section level2">
 <h2>Prerequisites</h2>
 <p>First it’s necessary to load the package:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(antaresEditObject)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># CRAN limite CPU usage</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">setDTthreads</span>(<span class="dv">2</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(antaresEditObject)</span></code></pre></div>
 <p>You need to set the path to an Antares study in “input” mode:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>antaresRead<span class="sc">::</span><span class="fu">setSimulationPath</span>(<span class="at">path =</span> <span class="st">&quot;path/to/study&quot;</span>, <span class="at">simulation =</span> <span class="st">&quot;input&quot;</span>)</span></code></pre></div>
 <p>Or you can simply create a new study:</p>

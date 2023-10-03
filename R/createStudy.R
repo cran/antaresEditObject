@@ -73,8 +73,14 @@ createStudy <- function(path, study_name = "my_study", antares_version = "8.2.0"
   if (antares_version >= as.numeric_version("8.1.0")) {
     activateRES(opts = opts)
   }
+  
+  if (antares_version >= as.numeric_version("8.6.0")) {
+    activateST(opts = opts)
+  }
   return(invisible(opts))
 }
+
+
 
 
 #' @param host Host of AntaREST server API.
@@ -110,18 +116,28 @@ createStudyAPI <- function(host, token = NULL, study_name = "my_study", antares_
 #' @title Delete a study
 #' 
 #' @param opts List. study options
+#' @param prompt_validation `logical` to put validation message to delete study (default `FALSE`)
 #'
 #' @export
-deleteStudy <- function(opts = simOptions()){
-  prompt_question <- sprintf("Are you sure you want to delete the study : %s (%s)?", 
-                             ifelse(opts$typeLoad == "api", opts$study_id, opts$studyPath), 
-                             opts$studyName)
-  prompt_answer <- menu(c("Yes", "No"), title=prompt_question)
-  if (prompt_answer == 2) return()
-  if (opts$typeLoad == "api") api_delete(opts = opts, endpoint = opts$study_id) else 
-    if (file.exists(opts$studyPath)) unlink(opts$studyPath, recursive = TRUE) else 
+deleteStudy <- function(opts = simOptions(), prompt_validation= FALSE){
+  if(prompt_validation){
+    prompt_question <- sprintf("Are you sure you want to delete the study : %s (%s)?", 
+                               ifelse(opts$typeLoad == "api", 
+                                      opts$study_id, 
+                                      opts$studyPath), 
+                               opts$studyName)
+    prompt_answer <- menu(c("Yes", "No"), 
+                          title=prompt_question)
+    if (prompt_answer == 2) 
+      return()
+  }
+  if(opts$typeLoad == "api") 
+    api_delete(opts = opts, endpoint = opts$study_id) 
+  else{
+    if(file.exists(opts$studyPath)) 
+      unlink(opts$studyPath, recursive = TRUE) 
+    else 
       stop("Study not found.")
+  } 
   cat("\nStudy successfully deleted")
 }
-
-
