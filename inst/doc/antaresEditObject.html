@@ -282,6 +282,85 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_output_on_console =</span> <span class="cn">TRUE</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
+<div id="read-a-time-series-update-it-and-write-it" class="section level2">
+<h2>Read a time series, update it and write it</h2>
+<p>To update an existing time series and write it, you can use the following commands :</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filepath of the study, version &gt;= 820</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>my_study <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>opts <span class="ot">&lt;-</span> <span class="fu">setSimulationPath</span>(my_study, <span class="at">simulation =</span><span class="st">&quot;input&quot;</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>opts<span class="sc">$</span>timeIdMax <span class="ot">&lt;-</span> <span class="dv">8760</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Links, use only one link</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">getLinks</span>()[<span class="dv">1</span>])</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ts_input <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">linkCapacity =</span> my_link, <span class="at">opts =</span> opts)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data to ensure its reliability</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">setorder</span>(ts_input, <span class="at">cols =</span> <span class="st">&quot;tsId&quot;</span>, <span class="st">&quot;timeId&quot;</span>) </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape to wide format : writeInputTS expects a 8760 * N matrix </span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;transCapacityDirect&quot;</span>, <span class="st">&quot;transCapacityIndirect&quot;</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>ts_input_reformatted <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">dcast</span>(ts_input,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>                                          timeId <span class="sc">~</span> tsId,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">value.var =</span> metrics</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                                          )</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a value my_param to your matrix</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>my_param <span class="ot">&lt;-</span> <span class="dv">123</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="fu">writeInputTS</span>(<span class="at">data =</span> ts_input_reformatted[,<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(ts_input_reformatted)] <span class="sc">+</span> my_param,</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>             <span class="at">type =</span> <span class="st">&quot;tsLink&quot;</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>             <span class="at">link =</span> my_link,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">overwrite =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">opts =</span> opts</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>             )</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Thermal, use only one area and one cluster</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>my_area <span class="ot">&lt;-</span> <span class="st">&quot;zone&quot;</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>my_cluster <span class="ot">&lt;-</span> <span class="st">&quot;mon_cluster&quot;</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>ts_input <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">thermalAvailabilities =</span> my_area, <span class="at">opts =</span> opts)</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>ts_input <span class="ot">&lt;-</span> ts_input[cluster <span class="sc">==</span> <span class="fu">paste0</span>(my_area,<span class="st">&quot;_&quot;</span>,my_cluster)]</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data to ensure its reliability</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">setorder</span>(ts_input, <span class="at">cols =</span> <span class="st">&quot;tsId&quot;</span>, <span class="st">&quot;timeId&quot;</span>)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape to wide format : writeInputTS expects a 8760 * N matrix </span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ThermalAvailabilities&quot;</span>)</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>ts_input_reformatted <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">dcast</span>(ts_input,</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>                                          timeId <span class="sc">~</span> tsId,</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">value.var =</span> metrics</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>                                          )</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a value my_param to your matrix</span></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>my_param <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a><span class="fu">editCluster</span>(<span class="at">area =</span> my_area,</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>            <span class="at">cluster_name =</span> my_cluster,</span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>            <span class="at">time_series =</span> ts_input_reformatted[,<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(ts_input_reformatted)] <span class="sc">+</span> my_param,</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>            <span class="at">opts =</span> opts</span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Run of River, use only one area</span></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>my_area <span class="ot">&lt;-</span> <span class="st">&quot;zone&quot;</span></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>ts_input <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">ror =</span> my_area, <span class="at">opts =</span> opts)</span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data to ensure its reliability</span></span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a>data.table<span class="sc">::</span><span class="fu">setorder</span>(ts_input, <span class="at">cols =</span> <span class="st">&quot;tsId&quot;</span>, <span class="st">&quot;timeId&quot;</span>)</span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape to wide format : writeInputTS expects a 8760 * N matrix </span></span>
+<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ror&quot;</span>)</span>
+<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a>ts_input_reformatted <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">dcast</span>(ts_input,</span>
+<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>                                          timeId <span class="sc">~</span> tsId,</span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">value.var =</span> metrics</span>
+<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a value my_param to your matrix</span></span>
+<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>my_param <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a><span class="fu">writeInputTS</span>(<span class="at">area =</span> my_area,</span>
+<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">&quot;hydroROR&quot;</span>,</span>
+<span id="cb18-72"><a href="#cb18-72" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> ts_input_reformatted[,<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(ts_input_reformatted)] <span class="sc">+</span> my_param,</span>
+<span id="cb18-73"><a href="#cb18-73" aria-hidden="true" tabindex="-1"></a>            <span class="at">overwrite =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-74"><a href="#cb18-74" aria-hidden="true" tabindex="-1"></a>            <span class="at">opts =</span> opts</span>
+<span id="cb18-75"><a href="#cb18-75" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
 
 
 
