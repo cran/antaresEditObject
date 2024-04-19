@@ -73,7 +73,21 @@ sapply(studies, function(study) {
         add_prefix = FALSE
       )
     }
-    expect_error(antaresRead::readClusterDesc())
+    
+    # list .ini files
+    path_thermal <- file.path(opts$inputPath, "thermal", "clusters")
+    all_ini_files <- list.files(path_thermal, full.names = TRUE, recursive = TRUE)
+    
+    # extract number or raw
+    suppressWarnings(
+      ini_nb_raw <- sapply(
+        lapply(all_ini_files, 
+               data.table::fread), 
+        function(x) dim(x)[2])
+    )
+    
+    # test all ini files are empty
+    expect_equal(sum(ini_nb_raw), 0)
     
   })
   
@@ -108,6 +122,16 @@ test_that("Create cluster with pollutants params (new feature v8.6)",{
     # check default values 
     testthat::expect_equal(all(is.na(values_default)), TRUE)
   })
+  
+  bad_pollutants_param <- "not_a_list"
+  testthat::expect_error(createCluster(
+    area = getAreas()[1],
+    cluster_name = "bad_cluster",
+    group = "Other",
+    unitcount = as.integer(1),
+    nominalcapacity = 100,
+    list_pollutants = bad_pollutants_param,
+    opts = opts_test), regexp = "'list_pollutants' must be a 'list'")
   
   pollutants_params <- list(
     "nh3"= 0.25, "nox"= 0.45, "pm2_5"= 0.25, 

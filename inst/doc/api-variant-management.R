@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -47,7 +47,7 @@ mockSimulationAPI()
 ## ----write-api-commands, eval=FALSE-------------------------------------------
 #  writeVariantCommands("path/to/commands.json")
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 knitr::include_graphics("figures/badge_api_ok.svg")
 
 ## ----create_area--------------------------------------------------------------
