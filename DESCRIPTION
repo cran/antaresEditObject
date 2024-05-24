@@ -1,7 +1,7 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 0.6.3
+Version: 0.6.4
 Authors@R: c(
     person("Tatiana", "Vargas", email = "tatiana.vargas@rte-france.com", role = c("aut", "cre")),
     person("Frederic", "Breant", role = "aut"),
@@ -34,7 +34,7 @@ Imports: assertthat, cli, data.table, httr, grDevices, jsonlite,
 Suggests: testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-04-24 14:26:06 UTC; berthetcle
+Packaged: 2024-05-24 12:36:28 UTC; berthetcle
 Author: Tatiana Vargas [aut, cre],
   Frederic Breant [aut],
   Victor Perrier [aut],
@@ -52,4 +52,4 @@ Author: Tatiana Vargas [aut, cre],
   RTE [cph]
 Maintainer: Tatiana Vargas <tatiana.vargas@rte-france.com>
 Repository: CRAN
-Date/Publication: 2024-04-29 19:20:02 UTC
+Date/Publication: 2024-05-24 13:00:02 UTC
