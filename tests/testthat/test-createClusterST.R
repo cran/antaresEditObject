@@ -1,5 +1,5 @@
 
-
+# >=860 ----
 test_that("Create short-term storage cluster (new feature v8.6)",{
   ## basics errors cases ----
   suppressWarnings(
@@ -28,7 +28,8 @@ test_that("Create short-term storage cluster (new feature v8.6)",{
   
   # cluster already exist in given area, with same name and group
   createClusterST(area_test_clust, 
-                  cluster_test_name, group_test_name,
+                  cluster_test_name, 
+                  group_test_name,
                   add_prefix = TRUE)
   
   testthat::expect_error(createClusterST(area_test_clust, 
@@ -55,7 +56,7 @@ test_that("Create short-term storage cluster (new feature v8.6)",{
   info_clusters <- readClusterSTDesc()
   info_clusters <- info_clusters[cluster %in% namecluster_check, ]
   
-  # default values
+  # default values (only v860 properties)
   default_values <- storage_values_default()
   
   info_clusters <- info_clusters[, .SD, .SDcols= names(default_values)]
@@ -171,303 +172,36 @@ test_that("Create short-term storage cluster (new feature v8.6)",{
   
   })
 
+# >=880 ----
 
-test_that("Test the behaviour of createClusterST() if the ST cluster already exists", {
+test_that("Create short-term storage cluster (new feature v8.8.0)",{
+  ## basics errors cases ----
+  suppressWarnings(
+    createStudy(path = tempdir(), 
+                study_name = "st-storage880", 
+                antares_version = "8.8.0"))
   
-  ant_version <- "8.6.0"
-  st_test <- paste0("my_study_860_", paste0(sample(letters,5),collapse = ""))
-  suppressWarnings(opts <- createStudy(path = pathstd, study_name = st_test, antares_version = ant_version))
-  area <- "zone51"
-  createArea(area)
-  suppressWarnings(opts <- setSimulationPath(opts$studyPath, simulation = "input"))
+  # default area with st cluster
+  area_test_clust = "al" 
+  createArea(name = area_test_clust)
   
-  val <- 0.7
-  val_mat <- matrix(val, 8760)
-  cl_name <- "test_storage"
-  createClusterST(area = area, 
-                    cluster_name = cl_name, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat, 
-                    opts = opts)
+  # default 
+  createClusterST(area = area_test_clust, 
+                  cluster_name = "default")
   
-  suppressWarnings(opts <- setSimulationPath(opts$studyPath, simulation = "input"))
+  read_prop <- readClusterSTDesc()
   
-  ## createClusterST()
-  # With overwrite FALSE  
-  expect_error(createClusterST(area = area, 
-                    cluster_name = cl_name, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = FALSE,                    
-                    opts = opts), regexp = "Cluster already exists.")
+  # "enabled" must be present with TRUE values default 
+  testthat::expect_true("enabled"%in%names(read_prop))
+  testthat::expect_true(read_prop$enabled[1]%in%TRUE)
   
-  # With overwrite TRUE  
-  expect_no_error(createClusterST(area = area, 
-                    cluster_name = cl_name, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = TRUE,                    
-                    opts = opts))
-  
-  # Test case insensitive
-  cl_name_2 <- "clUstEr_st_tEst_crEAtE2"
-  expect_no_error(createClusterST(area = area, 
-                    cluster_name = cl_name_2, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = FALSE,                    
-                    opts = simOptions()))
-                    
-  expect_error(createClusterST(area = toupper(area),
-                    cluster_name = toupper(cl_name_2), 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = FALSE,                    
-                    opts = simOptions()), regexp = "Cluster already exists.")
-  
-  ## removeClusterST()
-  # On a non-existing area
-  expect_error(removeClusterST(area = "bla",
-                    cluster_name = cl_name,
-                    add_prefix = TRUE,
-                    opts = simOptions()), regexp = "is not a valid area name")
-  
-  # On a non-existing cluster
-  expect_error(removeClusterST(area = area, 
-               cluster_name = "not_a_cluster",                   
-               opts = simOptions()), regexp = "Cluster can not be removed.")
-  
-  # On an existing cluster
-  expect_no_error(removeClusterST(area = area, 
-                        cluster_name = cl_name,
-                        add_prefix = TRUE,               
-                        opts = simOptions()))
-               
-  # On an existing cluster - idempotence
-  expect_error(removeClusterST(area = area, 
-               cluster_name = cl_name,                   
-               opts = simOptions()), regexp = "Cluster can not be removed.")
-  
-  # On an existing cluster case insensitive 
-  expect_no_error(removeClusterST(area = area,
-                    cluster_name = "CLuSTeR_ST_TeST_CReaTe2",
-                    add_prefix = TRUE,
-                    opts = simOptions()))
-  
-  unlink(x = opts$studyPath, recursive = TRUE)
-})
-
-
-test_that("Test the behaviour of createClusterST() if the ST cluster already exists", {
-  
-  ant_version <- "8.6.0"
-  st_test <- paste0("my_study_860_", paste0(sample(letters,5),collapse = ""))
-  suppressWarnings(opts <- createStudy(path = pathstd, study_name = st_test, antares_version = ant_version))
-  area <- "zone51"
-  createArea(area)
-  suppressWarnings(opts <- setSimulationPath(opts$studyPath, simulation = "input"))
-  
-  val <- 0.7
-  val_mat <- matrix(val, 8760)
-  cl_name <- "test_storage"
-  createClusterST(area = area, 
-                    cluster_name = cl_name, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat, 
-                    opts = opts)
-  
-  suppressWarnings(opts <- setSimulationPath(opts$studyPath, simulation = "input"))
-  
-  ## createClusterST()
-  # With overwrite FALSE  
-  expect_error(createClusterST(area = area, 
-                    cluster_name = cl_name, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = FALSE,                    
-                    opts = opts), regexp = "Cluster already exists.")
-  
-  # With overwrite TRUE  
-  expect_no_error(createClusterST(area = area, 
-                    cluster_name = cl_name, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = TRUE,                    
-                    opts = opts))
-  
-  # Test case insensitive
-  cl_name_2 <- "clUstEr_st_tEst_crEAtE2"
-  expect_no_error(createClusterST(area = area, 
-                    cluster_name = cl_name_2, 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = FALSE,                    
-                    opts = simOptions()))
-                    
-  expect_error(createClusterST(area = toupper(area),
-                    cluster_name = toupper(cl_name_2), 
-                    storage_parameters = storage_values_default()[1], 
-                    PMAX_injection = val_mat, 
-                    PMAX_withdrawal = val_mat, 
-                    inflows = val_mat, 
-                    lower_rule_curve = val_mat, 
-                    upper_rule_curve = val_mat,
-                    overwrite = FALSE,                    
-                    opts = simOptions()), regexp = "Cluster already exists.")
-  
-  ## removeClusterST()
-  # On a non-existing area
-  expect_error(removeClusterST(area = "bla",
-                    cluster_name = cl_name,
-                    add_prefix = TRUE,
-                    opts = simOptions()), regexp = "is not a valid area name")
-  
-  # On a non-existing cluster
-  expect_error(removeClusterST(area = area, 
-               cluster_name = "not_a_cluster",                   
-               opts = simOptions()), regexp = "Cluster can not be removed.")
-  
-  # On an existing cluster
-  expect_no_error(removeClusterST(area = area, 
-                        cluster_name = cl_name,
-                        add_prefix = TRUE,               
-                        opts = simOptions()))
-               
-  # On an existing cluster - idempotence
-  expect_error(removeClusterST(area = area, 
-               cluster_name = cl_name,                   
-               opts = simOptions()), regexp = "Cluster can not be removed.")
-  
-  # On an existing cluster case insensitive 
-  expect_no_error(removeClusterST(area = area,
-                    cluster_name = "CLuSTeR_ST_TeST_CReaTe2",
-                    add_prefix = TRUE,
-                    opts = simOptions()))
-  
-  unlink(x = opts$studyPath, recursive = TRUE)
-})
-
-
-# API ----
-
-test_that("API Command test for createClusterST", {
-  # Simulation parameters for api code
-  opts_mock <- mockSimulationAPI(force = TRUE, 
-                                 antares_version = "860")
-  
-  # create complete cluster st-storage
-  
-  area_name <- "area01"
-  cluster_name <- "ClusTER01"
-    
-    # no casse sensitiv
-  createClusterST(area = area_name, 
-                  cluster_name = cluster_name, 
-                  group = "Other", 
-                  storage_parameters = storage_values_default(),
-                  PMAX_injection = matrix(1,8760),
-                  PMAX_withdrawal = matrix(0.5,8760),
-                  inflows = matrix(0.25,8760),
-                  lower_rule_curve = matrix(0.2,8760),
-                  upper_rule_curve = matrix(0.9,8760))
-  
-  # use getVariantCommands to catch information
-    # here (specific st-storage : `list` with 1 group (parameters) + 5 data parameters)
-  res_list <- getVariantCommands(last = 6)
-  
-  ## test first group of list for ini parameters
-  action_api_1 <- res_list[[1]]
-  
-    # name of api instruction/action
-  testthat::expect_equal(action_api_1$action, "create_st_storage")
-    # check names and values parameters
-  names_st_paramas <- names(storage_values_default())
-  names_vector_parameters <-setdiff(names(action_api_1$args$parameters), 
-                                    c("name", "group"))
-      # check if all parameters are present
-  testthat::expect_true(all(names_st_paramas 
-                            %in% names_vector_parameters))
-    # check casse name cluster
-  name_ori <- paste0(area_name, "_", cluster_name)
-  
-  testthat::expect_equal(tolower(name_ori), 
-                         action_api_1$args$parameters$name) 
-  
-  ## test other group for data
-    # search "replace_matrix" action
-  index_data <- lapply(res_list, `[[`, 1) %in% 
-    "replace_matrix"
-  
-  data_list <- res_list[index_data]
-  
-    # test for every floor in "args" : 
-      # "target" (path of txt file)
-      # "matrix" (data)
-  data_path_files <- lapply(data_list, function(x){
-    x$args$target
-    })
-  
-    # test for every path, the path destination + name of txt file 
-       # name txt files corresponding data parameters of function `createClusterST()`
-  full_root_path_name <- file.path("input", "st-storage", "series", area_name,
-                                   tolower(name_ori))
-  
-  # from code 
-    # these names ares approved with antares desktop but not with API
-  names_file_list <- c("PMAX-injection", "PMAX-withdrawal", "inflows", 
-                       "lower-rule-curve", "upper-rule-curve")
-  
-  # reformat API 
-  names_file_list <- transform_name_to_id(names_file_list, id_dash = TRUE)
-  
-    # check root path for every file
-  is_good_path <- lapply(data_path_files, function(x){
-    grepl(pattern = full_root_path_name, x = x)
+  deleteStudy()
   })
-  
-  testthat::expect_true(all(unlist(is_good_path))) 
-  
-    # check names of files
-  names_file_api <- lapply(data_path_files, function(x){
-    regmatches(x,regexpr("([^\\/]+$)",x))
-  })
-  
-  testthat::expect_true(all(unlist(names_file_api) %in% 
-                              names_file_list))
-})
+
+
+
+
+
+
+
+

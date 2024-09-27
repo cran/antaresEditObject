@@ -132,16 +132,16 @@ getVariantCommands(last = 2)
 #  )
 #  getVariantCommands(last = TRUE)
 
-## ----remove_cluster-----------------------------------------------------------
-createCluster(
-  area = "area02", 
-  cluster_name = "clus000"
-)
-removeCluster(
-  area = "area02", 
-  cluster_name = "clus000"
-)
-getVariantCommands(last = TRUE)
+## ----remove_cluster, eval=FALSE-----------------------------------------------
+#  createCluster(
+#    area = "area02",
+#    cluster_name = "clus000"
+#  )
+#  removeCluster(
+#    area = "area02",
+#    cluster_name = "clus000"
+#  )
+#  getVariantCommands(last = TRUE)
 
 ## ----create_binding_constraint------------------------------------------------
 createBindingConstraint(

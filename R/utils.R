@@ -159,18 +159,16 @@ generate_cluster_name <- function(area, cluster_name, add_prefix) {
 }
 
 
-#' @importFrom antaresRead readClusterSTDesc
-check_cluster_name <- function(area, cluster_name, add_prefix, opts = antaresRead::simOptions()) {
-  
-  exists <- FALSE
-  
-  clusters <- readClusterSTDesc(opts = opts)
-  if (nrow(clusters) > 0) {
-    cluster_name <- generate_cluster_name(area, cluster_name, add_prefix)
-    clusters_filtered <- clusters[clusters$area == tolower(area) & clusters$cluster == cluster_name,]
-    exists <- nrow(clusters_filtered) > 0
+#' @title Format a value to a suitable format to rhs in an .ini file. 
+#'
+#' @param value The value to format.
+#'
+#' @return the formatted value
+.format_ini_rhs <- function(value){
+  # Convert logical to a lower case character to match the default existing file
+  if (inherits(x = value, what = "logical")) { 
+    value <- tolower(value)
   }
-    
-  return(exists)
+  
+  return(paste(as.character(value), collapse = ", "))
 }
-

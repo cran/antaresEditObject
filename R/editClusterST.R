@@ -38,15 +38,6 @@ editClusterST <- function(area,
   check_active_ST(opts, check_dir = TRUE)
   check_area_name(area, opts)
   
-  api_study <- is_api_study(opts)
-  # To avoid failure in an unit test (API is mocked) we add this block
-  if (api_study && is_api_mocked(opts)) {
-    cluster_exists <- TRUE
-  } else {
-    cluster_exists <- check_cluster_name(area, cluster_name, add_prefix, opts)
-  }
-  cl_name_msg <- generate_cluster_name(area, cluster_name, add_prefix)
-  assertthat::assert_that(cluster_exists, msg = paste0("Cluster '", cl_name_msg, "' does not exist. It can not be edited."))
   # statics groups
   st_storage_group <- c("PSP_open", 
                         "PSP_closed", 
@@ -72,14 +63,14 @@ editClusterST <- function(area,
     assertthat::assert_that(inherits(storage_parameters, "list"))
     
     # static name of list parameters 
-    names_parameters <- names(storage_values_default())
+    names_parameters <- names(storage_values_default(opts = opts))
     
     if(!all(names(storage_parameters) %in% names_parameters))
       stop(append("Parameter 'st-storage' must be named with the following elements: ", 
                   paste0(names_parameters, collapse= ", ")))
     
     # check values parameters
-    .st_mandatory_params(list_values = storage_parameters)
+    .st_mandatory_params(list_values = storage_parameters, opts = opts)
     
     # check list of parameters
     params_cluster <- hyphenize_names(storage_parameters)
@@ -96,51 +87,82 @@ editClusterST <- function(area,
     params_cluster$group <- NULL
   
   ##### API block ----
-  if (api_study) {
+  if (is_api_study(opts)) {
     # format name for API 
     cluster_name <- transform_name_to_id(cluster_name)
     
-    # update parameters if something else than name
-    if (length(params_cluster) > 1) {
-      currPath <- "input/st-storage/clusters/%s/list/%s" 
-      writeIni(
-        listData = params_cluster,
-        pathIni = sprintf(currPath, area, cluster_name),
-        opts = opts
-      )
+    ##
+    # PATCH for properties 
+    ##
+    # adapt parameter names
+    list_properties <- list("group" = params_cluster[["group"]],
+                            "name" = cluster_name,
+                            "injectionNominalCapacity" = params_cluster[["injectionnominalcapacity"]],
+                            "withdrawalNominalCapacity" = params_cluster[["withdrawalnominalcapacity"]],
+                            "reservoirCapacity" = params_cluster[["reservoircapacity"]],
+                            "efficiency" = params_cluster[["efficiency"]],
+                            "initialLevel" = params_cluster[["initiallevel"]],
+                            "initialLevelOptim" = params_cluster[["initialleveloptim"]],
+                            "enabled" = params_cluster[["enabled"]])
+    
+    list_properties <- dropNulls(list_properties)
+    
+    if(length(list_properties)>1){
+      # make json file
+      body <- jsonlite::toJSON(list_properties,
+                               auto_unbox = TRUE)
+      
+      # send request (without coeffs/term)
+      result <- api_patch(opts = opts, 
+                          endpoint = file.path(opts$study_id, 
+                                               "areas", 
+                                               area,
+                                               "storages",
+                                               cluster_name), 
+                          body = body, 
+                          encode = "raw")
+      
+      cli::cli_alert_success("Endpoint {.emph {'Edit ST-storage (properties)'}} {.emph 
+                      {.strong {cluster_name}}} success")
     }
     
-    # update data
-    names_data_params <- c("PMAX_injection",
-                           "PMAX_withdrawal",
-                           "inflows",
-                           "lower_rule_curve",
-                           "upper_rule_curve")
+    ##
+    # PUT for TS values
+    ##
+    # adapt list name TS 
+    list_value_ts <- list(pmax_injection = PMAX_injection,
+                          pmax_withdrawal = PMAX_withdrawal,
+                          inflows = inflows,
+                          lower_rule_curve = lower_rule_curve,
+                          upper_rule_curve = upper_rule_curve)
     
-    for (i in names_data_params){
-      if (!is.null(get(i))) {
-        # format name for API 
-        data_param_name <- transform_name_to_id(i, id_dash = TRUE)
+    list_value_ts <- dropNulls(list_value_ts)
+    
+    if(length(list_value_ts)!=0){
+      lapply(names(list_value_ts), function(x){
+        body = jsonlite::toJSON(list(data=list_value_ts[[x]],
+                                     index=0, 
+                                     columns=0),
+                                auto_unbox = FALSE)
         
-        currPath <- paste0("input/st-storage/series/%s/%s/",data_param_name)
-        cmd <- api_command_generate(
-          action = "replace_matrix",
-          target = sprintf(currPath, area, cluster_name),
-          matrix = get(i)
-        )
-        api_command_register(cmd, opts = opts)
-        `if`(
-          should_command_be_executed(opts),
-          api_command_execute(cmd, 
-                              opts = opts, 
-                              text_alert = paste0("Update ", 
-                                                  i, 
-                                                  " cluster's series: {msg_api}")),
-          cli_command_registered("replace_matrix")
-        )
-      }
+        endpoint <- file.path(opts$study_id, 
+                              "areas", 
+                              area, 
+                              "storages",
+                              cluster_name,
+                              "series", 
+                              x)
+        
+        # update
+        api_put(opts = opts, 
+                endpoint =  endpoint, 
+                body = body, 
+                encode = "raw")
+        
+        cli::cli_alert_success("Endpoint {.emph {'Edit ST-storage (TS value)'}} {.emph 
+                      {.strong {x}}} success")
+      })
     }
-    
     return(invisible(opts))
   }
   #####-
@@ -161,6 +183,15 @@ editClusterST <- function(area,
     # read previous content of ini
     previous_params <- readIniFile(file = path_clusters_ini)
     
+    if (!tolower(cluster_name) %in% tolower(names(previous_params)))
+      stop(
+        "'", 
+        cluster_name, 
+        "' doesn't exist, it can't be edited. You can create cluster with createCluster().",
+        call. = FALSE
+      )
+    
+    
     # select existing cluster
     ind_cluster <- which(tolower(names(previous_params)) %in% 
                            tolower(cluster_name))[1]
@@ -176,13 +207,9 @@ editClusterST <- function(area,
     )
   }
   
-  
-  
-  
   ##
   # check DATA (series/)
   ##
-  
   
   # datas associated with cluster
   path_txt_file <- file.path(opts$inputPath, 
