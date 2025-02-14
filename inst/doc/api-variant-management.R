@@ -47,9 +47,6 @@ mockSimulationAPI()
 ## ----write-api-commands, eval=FALSE-------------------------------------------
 #  writeVariantCommands("path/to/commands.json")
 
-## ----echo=FALSE---------------------------------------------------------------
-knitr::include_graphics("figures/badge_api_ok.svg")
-
 ## ----create_area--------------------------------------------------------------
 createArea(name = "area01")
 createArea(name = "area02")

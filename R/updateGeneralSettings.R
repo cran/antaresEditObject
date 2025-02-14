@@ -50,7 +50,7 @@
 #' @importFrom antaresRead setSimulationPath readIniFile
 #' @importFrom lifecycle is_present deprecate_warn deprecated
 #'
-#' @seealso \href{https://antares-simulator.readthedocs.io/en/latest/user-guide/solver/04-parameters/}{Antares General Reference Guide}
+#' @seealso {Antares General Reference Guide}
 #' 
 #' @examples
 #' \dontrun{
@@ -158,26 +158,7 @@ updateGeneralSettings <- function(mode = NULL,
   new_params <- lapply(X = new_params, FUN = .format_ini_rhs)
   names(new_params) <- sapply(names(new_params), dicoGeneralSettings, USE.NAMES = FALSE)  
   
-  # API block
-  if (is_api_study(opts)) {
-  
-    writeIni(listData = new_params, pathIni = "settings/generaldata/general", opts = opts)
-    
-    return(update_api_opts(opts))
-  }
-  
-  generaldatapath <- file.path(opts[["studyPath"]], "settings", "generaldata.ini")
-  generaldata <- readIniFile(file = generaldatapath)
-  
-  l_general <- generaldata[["general"]]
-  l_general <- modifyList(x = l_general, val = new_params)
-  generaldata[["general"]] <- l_general
-  
-  writeIni(listData = generaldata, pathIni = generaldatapath, overwrite = TRUE, opts = opts)
-  
-  suppressWarnings({
-    res <- setSimulationPath(path = opts[["studyPath"]], simulation = "input")
-  })
+  res <- update_generaldata_by_section(opts = opts, section = "general", new_params = new_params)
   
   invisible(res)
 }

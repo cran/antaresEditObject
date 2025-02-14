@@ -1,3 +1,29 @@
+> Copyright © 2016 RTE Reseau de transport d’electricite
+
+# antaresEditObject 0.9.0
+(cf. Antares v9 changelog)
+
+NEW FEATURES (Antares v9.0) :  
+
+* `createStudy()` takes into account the new format of Antares studies (e.g. 9.0, 9.15 instead of 900, 915)  
+
+BUGFIXES :  
+
+* `editBindingConstraint()` :  
+  - `operator` parameter set to NULL, by default, no longer causes an error.  
+  - To add values, the `operator` parameter is now required.  
+  - For a study version >= 832, the `filter-year-by-year` and `filter-synthesis` properties are retained in the .ini file if they are not modified.  
+* *[private function]* `api_command_execute()` manage snapshot generation of a variant study with a tempo to wait the end of current task (prevents the order from being ignored).  
+  - You can use global parameter `verbose` to `TRUE` ([#274](https://github.com/rte-antares-rpackage/antaresRead/pull/274) `antaresRead`) to display diagnostic messages (`getOption("antares")`)
+* `updateAdequacySettings()` : in API mode do not send NULL value
+
+
+GITHUB ACTIONS :  
+
+* Actions artifacts v3 is closing down, update to v4  
+* test-coverage.yaml updated 
+
+
 # antaresEditObject 0.7.1
 
 ### Breaking changes  :  
@@ -65,11 +91,13 @@ NEW FEATURES (Antares v8.7, cf. Antares v8.7 changelog) :
 
 # antaresEditObject 0.6.4 
 
-BREAKING CHANGES :
+BREAKING CHANGES :  
+
 * Add UTF-8 encoding argument in `.getJobs()`
 * Unit tests no longer call the study in the antaresRead package for versions > 8.0.0
 
-BUGFIXES :
+BUGFIXES :  
+
 * `createArea()`/`editArea()` : in API mode, split data in nodalOptimization argument to write it in the expected files
 * `editArea()` : not delete one of the two economic options if only one must be edited
 * Avoid data deletion in API mode for `editArea()`
