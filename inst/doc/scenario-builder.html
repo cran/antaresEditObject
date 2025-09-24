@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -376,13 +376,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="fu">getAreas</span>()</span>
 <span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ceres&quot; &quot;earth&quot; &quot;moon&quot;  &quot;titan&quot;</span></span>
 <span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="fu">readClusterDesc</span>()</span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt;      area  group     cluster   co2 enabled fixed.cost     gen.ts law.forced</span></span>
-<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;char&gt;      &lt;fctr&gt; &lt;num&gt;  &lt;lgcl&gt;      &lt;num&gt;     &lt;char&gt;     &lt;char&gt;</span></span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt; 1:  earth  Other     america     0    TRUE          0 Use Global    Uniform</span></span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt; 2:  earth  Other      africa     0    TRUE          0 Use Global    Uniform</span></span>
-<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt; 3:  earth  Other      europe     0    TRUE          0 Use Global    Uniform</span></span>
-<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; 4:   moon  Other tranquility     0    TRUE          0 Use Global    Uniform</span></span>
-<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; 5:   moon  Other    serenety     0    TRUE          0 Use Global    Uniform</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt;      area     cluster  group   co2 enabled fixed.cost     gen.ts law.forced</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt;      &lt;fctr&gt; &lt;char&gt; &lt;num&gt;  &lt;lgcl&gt;      &lt;num&gt;     &lt;char&gt;     &lt;char&gt;</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt; 1:  earth     america  Other     0    TRUE          0 Use Global    Uniform</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt; 2:  earth      africa  Other     0    TRUE          0 Use Global    Uniform</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt; 3:  earth      europe  Other     0    TRUE          0 Use Global    Uniform</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; 4:   moon tranquility  Other     0    TRUE          0 Use Global    Uniform</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; 5:   moon    serenety  Other     0    TRUE          0 Use Global    Uniform</span></span>
 <span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt;    law.planned marginal.cost market.bid.cost min.down.time min.stable.power</span></span>
 <span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt;         &lt;char&gt;         &lt;num&gt;           &lt;num&gt;         &lt;num&gt;            &lt;num&gt;</span></span>
 <span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; 1:     Uniform             0               0             1                0</span></span>

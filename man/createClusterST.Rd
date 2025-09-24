@@ -14,6 +14,13 @@ createClusterST(
   inflows = NULL,
   lower_rule_curve = NULL,
   upper_rule_curve = NULL,
+  cost_injection = NULL,
+  cost_withdrawal = NULL,
+  cost_level = NULL,
+  cost_variation_injection = NULL,
+  cost_variation_withdrawal = NULL,
+  constraints_properties = NULL,
+  constraints_ts = NULL,
   add_prefix = TRUE,
   overwrite = FALSE,
   opts = antaresRead::simOptions()
@@ -24,8 +31,8 @@ createClusterST(
 
 \item{cluster_name}{Name for the cluster, it will prefixed by area name, unless you set \code{add_prefix = FALSE}.}
 
-\item{group}{Group of the cluster, one of : "PSP_open", "PSP_closed", "Pondage", "Battery", "Other".
-It corresponds to the type of stockage.}
+\item{group}{Group of the cluster, one of : \emph{{PSP_open, PSP_closed, Pondage, Battery, Other}}.
+It corresponds to the type of stockage (\strong{dynamic name for Antares version >= 9.2}).}
 
 \item{storage_parameters}{\code{list } Parameters to write in the Ini file (see \code{Note}).}
 
@@ -40,9 +47,23 @@ generation or consumption on the system \code{numeric} \{<0;>0\} (8760*1).}
 
 \item{upper_rule_curve}{This is the upper limit for filling the stock imposed each hour. \code{numeric} \{0;1\} (8760*1).}
 
+\item{cost_injection}{Penalizes the injection flowrate at each hour (€/MWh) \code{numeric} \{>0\} (8760*1).}
+
+\item{cost_withdrawal}{Penalizes the withdrawal flowrate at each hour (€/MWh) \code{numeric} \{>0\} (8760*1).}
+
+\item{cost_level}{Penalizes the volume of stored energy at each hour (€/MWh) \code{numeric} \{<0;>0\} (8760*1).}
+
+\item{cost_variation_injection}{Penalizes injection flowrate variation every hour (€/MWh) \code{numeric} \{>0\} (8760*1).}
+
+\item{cost_variation_withdrawal}{Penalizes the withdrawal variation every hour (€/MWh) \code{numeric} \{>0\} (8760*1).}
+
+\item{constraints_properties}{\code{list } Parameters (see example)}
+
+\item{constraints_ts}{\code{list } of time series (see example)}
+
 \item{add_prefix}{If \code{TRUE} (the default), \code{cluster_name} will be prefixed by area name.}
 
-\item{overwrite}{Logical, overwrite the cluster or not.}
+\item{overwrite}{\code{logical}, overwrite the cluster or not.}
 
 \item{opts}{List of simulation parameters returned by the function
 \code{\link[antaresRead:setSimulationPath]{antaresRead::setSimulationPath()}}}
@@ -55,7 +76,9 @@ An updated list containing various information about the simulation.
 
 Create a new ST-storage cluster for >= v8.6.0 Antares studies.
 }
-\note{
+\section{note}{
+
+
 To write parameters to the \code{list.ini} file. You have function \code{storage_values_default()} who is called by default.
 This function return \code{list} containing properties according study version for cluster \code{st-storage}.
 
@@ -75,8 +98,16 @@ Study version >= "8.8.0" (update + new parameter) :
 \item enabled = TRUE (\code{logical} TRUE/FALSE)
 }
 
+Study version >= "9.2" (new parameters) :
+\itemize{
+\item efficiencywithdrawal = 1 (\code{numeric} \{0;1\})
+\item \code{penalize-variation-injection} = FALSE (\code{logical} TRUE/FALSE)
+\item \code{penalize-variation-withdrawal} = FALSE \code{logical} TRUE/FALSE)
+}
+
 By default, these values don't allow you to have an active cluster (See example section.)
 }
+
 \examples{
 \dontrun{
 
@@ -115,6 +146,76 @@ createClusterST(area = "my_area",
                 PMAX_injection = ratio_data, 
                 lower_rule_curve = ratio_data, 
                 upper_rule_curve = ratio_data)
+                
+# for a study version >= 9.2 (new parameters)
+my_parameters <- storage_values_default()
+my_parameters$efficiencywithdrawal <- 0.5
+my_parameters$`penalize-variation-injection` <- TRUE
+my_parameters$`penalize-variation-withdrawal` <- TRUE
+
+createClusterST(area = "my_area", 
+                "my_cluster",
+                storage_parameters = my_parameters)
+               
+  # time series                  
+ratio_value <- matrix(0.7, 8760)
+
+# default properties with new optional TS
+createClusterST(area = "fr", 
+                cluster_name = "good_ts_value", 
+                cost_injection = ratio_value, 
+                cost_withdrawal = ratio_value, 
+                cost_level = ratio_value, 
+                cost_variation_injection = ratio_value,
+                cost_variation_withdrawal = ratio_value)         
+                
+# Add optional constraints properties 
+    
+name_no_prefix <- "add_constraints"
+
+constraints_properties <- list(
+  "withdrawal-1"=list(
+    variable = "withdrawal",
+    operator = "equal",
+    hours = c("[1,3,5]", 
+              "[120,121,122,123,124,125,126,127,128]")
+  ),
+  "netting-1"=list(
+    variable = "netting",
+    operator = "less",
+    hours = c("[1, 168]")
+  ))
+
+# create a cluster with constraint properties (no need to provide TS)
+createClusterST(area = area_test_clust, 
+                cluster_name = name_no_prefix, 
+                constraints_properties = constraints_properties)         
+
+   # Add optional constraints properties + TS 
+   
+constraints_properties <- list(
+  "withdrawal-2"=list(
+    variable = "withdrawal",
+    operator = "equal",
+    hours = c("[1,3,5]", 
+              "[120,121,122,123,124,125,126,127,128]")
+  ),
+  "netting-2"=list(
+    variable = "netting",
+    operator = "less",
+    hours = c("[1, 168]")
+  ))    
+   
+good_ts <- matrix(0.7, 8760)
+constraints_ts <- list(
+  "withdrawal-2"=good_ts,
+  "netting-2"=good_ts)
+
+# create a cluster with constraint properties + TS
+createClusterST(area = area_test_clust, 
+                cluster_name = name_no_prefix, 
+                constraints_properties = constraints_properties, 
+                constraints_ts = constraints_ts)
 }
 
 }

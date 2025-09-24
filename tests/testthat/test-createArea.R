@@ -71,7 +71,7 @@ sapply(studies, function(study) {
   # Initialize hydro.ini values for a new area 
   test_that("Check if hydro.ini default values are initialized when creating an area", {
     
-    default_hydro_params <- get_default_hydro_ini_values()
+    default_hydro_params <- get_default_hydro_ini_values(opts=opts)
     
     hydro_ini_path <- file.path("input", "hydro", "hydro.ini")
     hydro_ini_data <- readIni(pathIni = hydro_ini_path, opts = opts)
@@ -520,4 +520,79 @@ test_that(".split_nodalOptimization_by_target() has the expected behaviour", {
   expect_true(inherits(x = res[["toIniAreas"]], what = "list"))
   expect_true(length(res[["toIniAreas"]]) == 1)
   expect_true(names(res[["toIniAreas"]]) == "spilledenergycost")
+})
+
+
+# >= 920----
+test_that("New HYDRO default parameter", {
+  suppressWarnings(
+    createStudy(path = tempdir(), 
+                study_name = "test_area9.2", 
+                antares_version = "9.2"))
+  
+  # default area with st cluster
+  area_test = "al" 
+  createArea(name = area_test)
+  
+  hydro_ini_path <- file.path("input", "hydro", "hydro.ini")
+  hydro_ini_data <- readIni(pathIni = hydro_ini_path)
+  
+  new_params_names <- "overflow spilled cost difference"
+  
+  # test name + value
+  expect_true(new_params_names %in% names(hydro_ini_data))
+  expect_equal(names(hydro_ini_data[[new_params_names]]), "al")
+  expect_equal(hydro_ini_data[[new_params_names]][[area_test]], 1)
+  
+  
+  
+  test_that("Remove area / check hydro params", {
+    area_test = "al2" 
+    createArea(name = area_test)
+    
+    removeArea(name = area_test)
+    
+    hydro_ini_path <- file.path("input", "hydro", "hydro.ini")
+    hydro_ini_data <- readIni(pathIni = hydro_ini_path)
+    new_params_names <- "overflow spilled cost difference"
+    
+    # test name + value
+    expect_true(new_params_names %in% names(hydro_ini_data))
+    expect_false(area_test %in% names(hydro_ini_data[[new_params_names]]))
+  })
+  
+  
+  deleteStudy()
+})
+
+
+test_that("Check ui data", {
+  
+  suppressWarnings({
+    opts <- createStudy(study_name = "test_ui", path = tempdir(), antares_version = "8.8.0")
+  })
+  
+  area <- "zone1"
+  createArea(name = area, localization = c(200,100), color = grDevices::rgb(255, 123, 110, max = 255), opts = opts)
+  
+  ui <- readIniFile(file.path(opts$inputPath, "areas", area, "ui.ini"))
+  
+  expect_true(inherits(x = ui, what = "list"))
+  expect_true(length(ui) == 4)
+  expect_equal(sort(names(ui)), c("layerColor", "layerX", "layerY", "ui"))
+  
+  expect_equal(ui[["ui"]][["x"]], 200)
+  expect_equal(ui[["ui"]][["y"]], 100)
+  expect_equal(ui[["ui"]][["color_r"]], 255)
+  expect_equal(ui[["ui"]][["color_g"]], 123)
+  expect_equal(ui[["ui"]][["color_b"]], 110)
+  expect_equal(ui[["ui"]][["layers"]], 0)
+  
+  expect_equal(ui[["layerX"]][["0"]], 200)
+  
+  expect_equal(ui[["layerY"]][["0"]], 100)
+  
+  expect_equal(ui[["layerColor"]][["0"]], "255, 123, 110")
+  
+  deleteStudy(opts = opts)
 })

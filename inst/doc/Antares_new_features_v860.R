@@ -133,13 +133,13 @@ editCluster(area = "fr",
 param_th_cluster <- readClusterDesc()
 rmarkdown::paged_table(param_th_cluster)
 
-## ----schema combinatoire , echo=FALSE, fig.cap="", out.width = '50%', fig.align='center'----
-knitr::include_graphics("schemas/mingen_hydro_rules.png")
+## ----schema combinatoire , echo=FALSE, fig.cap="", out.width = '40%', fig.alt="hydro params", fig.align='center'----
+knitr::include_graphics("mingen_hydro_rules.png")
 
-## ----schema, echo=FALSE, fig.cap="", out.width = '75%', fig.align='center'----
+## ----schema, echo=FALSE, fig.cap="", out.width = '100%', fig.alt="mingen schema", fig.align='center'----
 # path_image <- sourcedir860 <- system.file("doc/schemas", package = "antaresEditObject")
 # knitr::include_graphics(file.path(path_image,"mingen.png"))
-knitr::include_graphics("schemas/mingen_draw.png")
+knitr::include_graphics("mingen_draw.png")
 
 ## ----hydro ini----------------------------------------------------------------
 # see hydro parameters 

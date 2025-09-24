@@ -11,41 +11,41 @@ data.table::setDTthreads(2)
 library(antaresEditObject)
 
 ## ----set-simulation-path, eval=FALSE------------------------------------------
-#  antaresRead::setSimulationPathAPI(
-#    host = "http://localhost:8080",
-#    study_id = "70a08fae-da67-444a-b2ed-df4c0f956a31",
-#    token = NULL,
-#    simulation = "input"
-#  )
+# antaresRead::setSimulationPathAPI(
+#   host = "http://localhost:8080",
+#   study_id = "70a08fae-da67-444a-b2ed-df4c0f956a31",
+#   token = NULL,
+#   simulation = "input"
+# )
 
 ## ----create-variant, eval=FALSE-----------------------------------------------
-#  # Create new variant
-#  createVariant("variant-1")
-#  
-#  # use an existing one
-#  useVariant("variant-2")
+# # Create new variant
+# createVariant("variant-1")
+# 
+# # use an existing one
+# useVariant("variant-2")
 
 ## ----mock-api-----------------------------------------------------------------
 mockSimulationAPI()
 
 ## ----set-api-mode, eval=FALSE-------------------------------------------------
-#  setAPImode("async")
-#  # or
-#  setAPImode("sync")
+# setAPImode("async")
+# # or
+# setAPImode("sync")
 
 ## ----get-api-commands, eval=FALSE---------------------------------------------
-#  getVariantCommands()
+# getVariantCommands()
 
 ## ----get-api-commands-last, eval=FALSE----------------------------------------
-#  getVariantCommands(last = TRUE)
-#  # or use a numeric to get the last N commands
-#  getVariantCommands(last = 3)
+# getVariantCommands(last = TRUE)
+# # or use a numeric to get the last N commands
+# getVariantCommands(last = 3)
 
 ## ----get-api-commands-actions, eval=FALSE-------------------------------------
-#  getVariantCommands(actions = "create_area")
+# getVariantCommands(actions = "create_area")
 
 ## ----write-api-commands, eval=FALSE-------------------------------------------
-#  writeVariantCommands("path/to/commands.json")
+# writeVariantCommands("path/to/commands.json")
 
 ## ----create_area--------------------------------------------------------------
 createArea(name = "area01")
@@ -118,27 +118,27 @@ createCluster(
 getVariantCommands(last = 2)
 
 ## ----edit_cluster, eval = FALSE-----------------------------------------------
-#  createCluster(
-#    area = "area02",
-#    cluster_name = "clus02"
-#  )
-#  editCluster(
-#    area = "area02",
-#    cluster_name = "clus02",
-#    unitcount = 5L
-#  )
-#  getVariantCommands(last = TRUE)
+# createCluster(
+#   area = "area02",
+#   cluster_name = "clus02"
+# )
+# editCluster(
+#   area = "area02",
+#   cluster_name = "clus02",
+#   unitcount = 5L
+# )
+# getVariantCommands(last = TRUE)
 
 ## ----remove_cluster, eval=FALSE-----------------------------------------------
-#  createCluster(
-#    area = "area02",
-#    cluster_name = "clus000"
-#  )
-#  removeCluster(
-#    area = "area02",
-#    cluster_name = "clus000"
-#  )
-#  getVariantCommands(last = TRUE)
+# createCluster(
+#   area = "area02",
+#   cluster_name = "clus000"
+# )
+# removeCluster(
+#   area = "area02",
+#   cluster_name = "clus000"
+# )
+# getVariantCommands(last = TRUE)
 
 ## ----create_binding_constraint------------------------------------------------
 createBindingConstraint(
