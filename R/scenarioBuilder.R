@@ -1,3 +1,4 @@
+utils::globalVariables(c('full_path','cluster_name'))
 #' @title Read, create, update & deduplicate scenario builder
 #' 
 #' @description 
@@ -104,6 +105,9 @@
 #'   h = hydro_sb,
 #'   s = solar_sb
 #' ))
+#' # for binding constraints (study version >= 9.3.0)
+#' updateScenarioBuilder(ldata = sbuilder, series = "sts")
+#' updateScenarioBuilder(ldata = sbuilder, series = "sta")
 #' 
 #' # Deduplicate scenario builder
 #' 
@@ -163,10 +167,10 @@ scenarioBuilder <- function(n_scenario = 1,
 }
 
 # Private function of scenarioBuilder()
-  # <v870 paradigm 
+# <v870 paradigm 
 .manage_parameter <- function(..., opts){
   args <- list(...)
-    
+  
   # automatic parameter management 
   if (is.null(args$areas)) {
     args$areas <- antaresRead::getAreas(opts = opts)
@@ -213,7 +217,7 @@ scenarioBuilder <- function(n_scenario = 1,
 }
 
 # Private function of scenarioBuilder()
-  # >=v870 paradigm 
+# >=v870 paradigm 
 .manage_parameter_bc <- function(..., opts){
   args <- list(...)
   
@@ -222,7 +226,7 @@ scenarioBuilder <- function(n_scenario = 1,
     args$group_bc <- readBindingConstraints(opts = opts)
     args$group_bc <- sapply(group_bc, function(x){
       x$properties$group
-      })
+    })
   }
   else 
     group_bc <- unique(c(args$group_bc, args$group_bc_rand))
@@ -262,9 +266,9 @@ scenarioBuilder <- function(n_scenario = 1,
 #' @export
 create_scb_referential_series_type <- function(){
   
-  series_to_write <- c("l", "h", "w", "s", "t", "r", "ntc", "hl", "bc", "hfl")
+  series_to_write <- c("l", "h", "w", "s", "t", "r", "ntc", "hl", "bc", "hfl","sts","sta")
   choices <- c("load", "hydro", "wind", "solar", "thermal", "renewables", 
-               "ntc", "hydrolevels", "binding", "hydro final level")
+               "ntc", "hydrolevels", "binding", "hydro final level", "sct apports", "sct contraintes")
   
   # Check data consistency
   len_series_to_write <- length(series_to_write)  
@@ -277,7 +281,7 @@ create_scb_referential_series_type <- function(){
   ref_series <- data.frame("series" = c(series_to_write, choices),
                            "choices" = rep(choices, 2),
                            "type" = c(rep("w",len_series_to_write), rep("r",len_choices))
-                          )
+  )
   return(ref_series)
 }
 
@@ -295,7 +299,7 @@ create_scb_referential_series_type <- function(){
 readScenarioBuilder <- function(ruleset = "Default Ruleset",
                                 as_matrix = TRUE,
                                 opts = antaresRead::simOptions()) {
-assertthat::assert_that(inherits(opts, "simOptions"))
+  assertthat::assert_that(inherits(opts, "simOptions"))
   
   # read existing scenariobuilder.dat
   if (is_api_study(opts)) {
@@ -321,7 +325,7 @@ assertthat::assert_that(inherits(opts, "simOptions"))
   }
   if (is.null(sb))
     return(list())
- 
+  
   types <- extract_el(sb, 1)
   sbt <- split(x = sb, f = types)
   if (is_active_RES(opts)) {
@@ -348,7 +352,7 @@ assertthat::assert_that(inherits(opts, "simOptions"))
             years = as.numeric(years) + 1,
             values = unlist(x, use.names = FALSE)
           )
-   
+          
           SB <- dcast(data = SB, 
                       formula = group ~ years, 
                       value.var = "values")
@@ -359,13 +363,15 @@ assertthat::assert_that(inherits(opts, "simOptions"))
           x
       }else{
         areas <- extract_el(x, 2)
-        if (type %in% c("t", "r")) {
+        if (type %in% c("t", "r","sts")) {
           clusters <- extract_el(x, 4)
           areas <- paste(areas, clusters, sep = "_")
           # all_areas <- areas # for the moment
           if (type == "t") {
             clusdesc <- readClusterDesc(opts = opts)
-          } else {
+          }else if (type == "sts") {
+            clusdesc <- readClusterSTDesc(opts = opts)
+          }else {
             if (packageVersion("antaresRead") < "2.2.8")
               stop("You need to install a more recent version of antaresRead (>2.2.8)", call. = FALSE)
             if (!exists("readClusterResDesc", where = "package:antaresRead", mode = "function"))
@@ -374,7 +380,23 @@ assertthat::assert_that(inherits(opts, "simOptions"))
             clusdesc <- read_cluster_res_desc(opts = opts)
           }
           all_areas <- paste(clusdesc$area, clusdesc$cluster, sep = "_")
-        } else {
+          }else if (type == "sta") {
+            if (is_api_study(opts)) {
+              body_json <- api_get(
+                opts = opts,
+                endpoint = paste0(opts$study_id, "/table-mode/st-storages-additional-constraints"),
+                query = list(columns = "")
+              )
+              clusdesc <- build_st_constraints_names_df(body_json)  
+            } else {
+              clusdesc <- read_constraints_name_disc(opts = opts) 
+            }
+            
+            constraints <- extract_el(x, 5)
+            clusters    <- extract_el(x, 4)
+            areas       <- paste(areas, clusters, constraints, sep = "_")
+            all_areas   <- paste(clusdesc$area, clusdesc$cluster, clusdesc$constraint, sep = "_")
+          } else {
           all_areas <- getAreas(opts = opts)
         }
         if (type %in% c("ntc")) {
@@ -402,7 +424,7 @@ assertthat::assert_that(inherits(opts, "simOptions"))
           x
         }
       }
-    
+      
     }
   )
 }
@@ -416,7 +438,7 @@ extract_el <- function(l, indice) {
 
 #' @param ldata A `matrix` obtained with `scenarioBuilder`, 
 #'  or a named list of matrices obtained with `scenarioBuilder`, names must be 
-#'  'l', 'h', 'w', 's', 't', 'r', 'ntc', 'hl', 'bc' or 'hfl', depending on the series to update.
+#'  'l', 'h', 'w', 's', 't', 'r', 'ntc', 'hl', 'bc', 'hfl', 'sts' or 'sta', depending on the series to update.
 #' @param series Name(s) of the serie(s) to update if `ldata` is a single `matrix`.
 #' @param clusters_areas A `data.table` with two columns `area` and `cluster`
 #'  to identify area/cluster couple to update for thermal or renewable series.
@@ -442,6 +464,8 @@ extract_el <- function(l, indice) {
 #'  - t or thermal
 #'  - w or wind
 #'  - hfl or hydro final level
+#'  - sts or sct apports
+#'  - sta or sct contraintes
 #' 
 #' @export
 #' 
@@ -476,6 +500,9 @@ updateScenarioBuilder <- function(ldata,
       if (isTRUE("hfl" %in% series) & isTRUE(opts$antaresVersion < 920))
         stop("updateScenarioBuilder: cannot use series='hfl' with Antares < 9.2", 
              call. = FALSE)
+      if (any(series %in% c("sts", "sta")) & isTRUE(opts$antaresVersion < 930))
+        stop("updateScenarioBuilder: cannot use series='sts' with Antares < 9.3", 
+             call. = FALSE)
       series <- ref_series[ref_series$choices %in% choices & ref_series$type == "w", "series"]
     } else {
       stop("If 'ldata' isn't a named list, you must specify which serie(s) to use!", call. = FALSE)
@@ -502,6 +529,9 @@ updateScenarioBuilder <- function(ldata,
            call. = FALSE)
     if (isTRUE("hfl" %in% series) & isTRUE(opts$antaresVersion < 920))
       stop("updateScenarioBuilder: cannot use series='hfl' with Antares < 9.2", 
+           call. = FALSE)
+    if (any(series %in% c("sts", "sta")) & isTRUE(opts$antaresVersion < 930))
+      stop("updateScenarioBuilder: cannot use series='sts' with Antares < 9.3", 
            call. = FALSE)
     sbuild <- lapply(
       X = series,
@@ -603,7 +633,7 @@ clearScenarioBuilder <- function(ruleset = "Default Ruleset",
 #' @param opts Simulation options.
 #'
 #' @importFrom data.table as.data.table melt := .SD
-#' @importFrom antaresRead readClusterDesc getLinks
+#' @importFrom antaresRead readClusterDesc getLinks readClusterSTDesc
 #' @importFrom utils packageVersion getFromNamespace
 #' @noRd
 listify_sb <- function(mat,
@@ -673,13 +703,55 @@ listify_sb <- function(mat,
     )
   }
   
+  # Sts
+  if (identical(series, "sts")) {
+    if (is.null(clusters_areas))
+      clusters_areas <- readClusterSTDesc(opts = opts)
+    dtsb <- merge(
+      x = dtsb, 
+      y = clusters_areas[, .SD, .SDcols = c("area", "cluster")],
+      by.x = "rn",
+      by.y = "area", 
+      allow.cartesian = TRUE
+    )
+  }
+  
+  # Sta
+  if (identical(series, "sta")) {
+    if (is.null(clusters_areas)){
+      if (is_api_study(opts = opts)){
+        table_type <- "st-storages-additional-constraints"
+        
+        body_json <- api_get(
+          opts = opts,
+          endpoint = paste0(opts$study_id, "/table-mode/", table_type),
+          query = list(columns = "")
+        )
+        cluster_constraints=build_st_constraints_names_df(body_json)
+      }else{
+        cluster_constraints <-read_constraints_name_disc(opts = opts)
+      }
+    }
+    
+    cluster_constraints=unique(cluster_constraints)
+    dtsb=unique(dtsb)
+    dtsb <- merge(
+      x = dtsb, 
+      y = cluster_constraints[, .SD, .SDcols = c("area", "cluster", "constraint")],
+      by.x = "rn",
+      by.y = "area", 
+      allow.cartesian = TRUE
+    )
+  }
   dtsb <- dtsb[order(rn, variable)]
   
   lsb <- as.list(as.character(dtsb$value))
-  if (series %in% c("r", "t")) {
+  if (series %in% c("r", "t","sts")) {
     names(lsb) <- paste(series, dtsb$rn, dtsb$variable, dtsb$cluster, sep = ",")
   } else if (series %in% c("ntc")) {
     names(lsb) <- paste(series, dtsb$rn, dtsb$to, dtsb$variable, sep = ",")
+  }else if (series %in% c("sta")) {
+    names(lsb) <- paste(series, dtsb$rn, dtsb$variable, dtsb$cluster,dtsb$constraint, sep = ",")
   } else {
     names(lsb) <- paste(series, dtsb$rn, dtsb$variable, sep = ",")
   }
@@ -755,4 +827,88 @@ deduplicateScenarioBuilder <- function(ruleset = "Default Ruleset",
   pathSB <- file.path(opts$studyPath, "settings", "scenariobuilder.dat")
   writeIni(listData = newSB, pathIni = pathSB, overwrite = TRUE, default_ext = ".dat")
   cat("\u2713", "Scenario Builder deduplicated\n")
+}
+
+# Returns 'y' if 'x' is NULL, otherwise returns 'x'
+`%||%` <- function(x, y) if (is.null(x)) y else x
+#' Returns the name of the additional constraint
+#'
+#' @param body_json 
+#' @noRd
+build_st_constraints_names_df <- function(body_json) {
+  keys <- names(body_json)
+  if (is.null(keys) || length(keys) == 0) {
+    return(data.frame(
+      area = character(),
+      cluster = character(),
+      constraint = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+  
+  parts <- strsplit(keys, " / ", fixed = TRUE)
+  
+  area <-   vapply(parts, function(p) trimws(if (length(p) >= 1) p[1] else NA_character_), character(1))
+  cluster <- vapply(parts, function(p) trimws(if (length(p) >= 2) p[2] else NA_character_), character(1))
+  constraint <- vapply(parts, function(p) trimws(if (length(p) >= 3) p[3] else NA_character_), character(1))
+  
+  unique(data.table(area = area, cluster = cluster, constraint = constraint))
+}
+
+#' Read constraint names in disc mode
+#'
+#' @param opts
+#'   List of simulation parameters returned by the function
+#'   [antaresRead::setSimulationPath()]
+#' @noRd
+read_constraints_name_disc <- function(opts= antaresRead::simOptions()){
+  # Root folder that contains /<area>/<cluster>/additional_constraints/*.ini
+  path <- file.path(opts$inputPath, "st-storage", "constraints")
+  
+  # List all files under the root (both full paths and relative paths)
+  current_files <- data.table(
+    full_path    = list.files(path, recursive = TRUE, full.names = TRUE),
+    content_path = list.files(path, recursive = TRUE)
+  )
+  
+  # Split the relative path into parts: area / cluster / file
+  parts <- tstrsplit(current_files$content_path, "/", fixed = TRUE)
+  df_structured <- data.table(
+    full_path    = current_files$full_path,
+    area         = parts[[1]],
+    cluster_name = parts[[2]],
+    file         = parts[[3]]
+  )
+  
+  # Group by area for easier traversal (optional, just for structure)
+  df_by_area <- split(df_structured, df_structured$area)
+  
+  # Extract constraint names from .ini files (section names)
+  list_constraints <- lapply(names(df_by_area), function(area_name) {
+    df <- df_by_area[[area_name]]
+    
+    # Keep only .ini files inside additional_constraints folders
+    df_ini <- df[grepl("\\.ini$", file, ignore.case = TRUE)]
+    if (nrow(df_ini) == 0) return(NULL)
+    
+    clusters <- unique(df_ini$cluster_name)
+    
+    do.call(rbind, lapply(clusters, function(cl) {
+      ini_paths <- df_ini[cluster_name == cl, full_path]
+      if (!length(ini_paths)) return(NULL)
+      
+      # A cluster can have one or multiple .ini files
+      constraint_names <- unlist(lapply(ini_paths, function(p) names(readIniFile(p))))
+      if (!length(constraint_names)) return(NULL)
+      
+      data.table(
+        area       = area_name,
+        cluster    = cl,
+        constraint = constraint_names
+      )
+    }))
+  })
+  # Final result: one row per constraint
+  cluster_constraints <- rbindlist(list_constraints, use.names = TRUE, fill = TRUE)
+  return(cluster_constraints)
 }

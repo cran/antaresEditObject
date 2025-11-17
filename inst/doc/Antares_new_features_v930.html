@@ -12,7 +12,7 @@
 
 
 
-<title>Antares new features v9.2</title>
+<title>Antares new features v9.3</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1607,36 +1607,42 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Antares new features v9.2</h1>
+<h1 class="title toc-ignore">Antares new features v9.3</h1>
 
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(antaresEditObject)</span></code></pre></div>
 <p>This article will present the new features in line with
-<strong>Antares v9.2</strong> (cf <a href="https://antares-simulator.readthedocs.io/en/latest/user-guide/04-migration-guides/#v920">Antares
+<strong>Antares v9.3</strong> (cf <a href="https://antares-simulator.readthedocs.io/en/latest/user-guide/04-migration-guides/#v930">Antares
 Simulator</a>)</p>
-<div id="create-new-study-v9.2" class="section level2">
-<h2>Create new study v9.2</h2>
+<div id="create-new-study-v9.3" class="section level2">
+<h2>Create new study v9.3</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dir_path <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">suppressWarnings</span>(</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">createStudy</span>(<span class="at">path =</span> dir_path, </span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>            <span class="at">study_name =</span> <span class="st">&quot;test920&quot;</span>, </span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>            <span class="at">antares_version =</span> <span class="st">&quot;9.2&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>            <span class="at">study_name =</span> <span class="st">&quot;test930&quot;</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>            <span class="at">antares_version =</span> <span class="st">&quot;9.3&quot;</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span></code></pre></div>
-<p>For Antares Simulator, format version is now “9.2”. For packages, we
-make the adjustment and we keep “920”.</p>
+<p>For Antares Simulator, format version is now “9.3”. For packages, we
+make the adjustment and we keep “930”.</p>
 <p><strong>Check version of my current study</strong> :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>current_study_opts <span class="ot">&lt;-</span> <span class="fu">simOptions</span>()</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>current_study_opts<span class="sc">$</span>antaresVersion</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] 920</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] 930</span></span></code></pre></div>
 <p>Some minor changes to the creation of the study.</p>
 <p>Initializes the study by updating the <code>generaldata.ini</code>
 file :</p>
 <ul>
-<li>the value of the <code>shedding-policy</code> parameter is changed
-to “accurate shave peaks”</li>
-<li>a new “compatibility” section is created with parameter
-<code>hydro-pmax</code> = “daily”</li>
+<li><p>The following properties were removed from
+settings/generaldata.ini.</p>
+<ul>
+<li>refreshtimeseries</li>
+<li>refreshintervalload</li>
+<li>refreshintervalhydro</li>
+<li>refreshintervalwind</li>
+<li>refreshintervalthermal</li>
+<li>refreshintervalsolar</li>
+</ul></li>
 </ul>
 </div>
 <div id="create-area" class="section level2">
@@ -1645,9 +1651,6 @@ to “accurate shave peaks”</li>
 <em>st-storages</em>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">createArea</span>(<span class="at">name =</span> <span class="st">&quot;fr&quot;</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">createArea</span>(<span class="at">name =</span> <span class="st">&quot;it&quot;</span>)</span></code></pre></div>
-<p>A new parameter <code>overflow spilled cost difference</code> in
-<code>hydro.ini</code> file (<em>input/hydro/hydro.ini</em>) is
-initiated (<em>default value = 1</em>).</p>
 </div>
 <div id="short-term-storage" class="section level2">
 <h2>Short term storage</h2>
@@ -1657,137 +1660,94 @@ initiated (<em>default value = 1</em>).</p>
 <p>By default you can call function only with two parameters
 (<code>area</code>, <code>cluster_name</code>).</p>
 <p>Clusters are created with default properties and time series.</p>
-<div id="dynamic-group-names" class="section level3">
-<h3>Dynamic group names</h3>
-<p>Default <code>group</code> is still “Other1” and now you can
-<strong>create/edit</strong> your own group name (<em>only for version
-study &gt;= 9.2</em>).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># creation</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                <span class="at">group =</span> <span class="st">&quot;my_own_group&quot;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;it&quot;</span>, </span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>                <span class="at">group =</span> <span class="st">&quot;my_own_group_again&quot;</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co"># edit group of existing st-storage cluster</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="fu">editClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>              <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>              <span class="at">group =</span> <span class="st">&quot;my_own_group_Pondage&quot;</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co"># read cluster properties</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["efficiency"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[8],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"my_own_group_Pondage","4":"1","5":"1","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"FALSE","11":"FALSE","12":"0","13":"0"},{"1":"it","2":"it_test_storage","3":"my_own_group_again","4":"1","5":"1","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"FALSE","11":"FALSE","12":"0","13":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-</div>
 <div id="new-properties" class="section level3">
 <h3>New properties</h3>
 <p>you can create or edit new clusters with new properties (see doc
 <code>?createClusterST</code>).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># new properties (default values)</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(<span class="fu">as.data.frame</span>(<span class="fu">storage_values_default</span>(), <span class="at">check.names =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># new properties (default values)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(<span class="fu">as.data.frame</span>(<span class="fu">storage_values_default</span>(), <span class="at">check.names =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["efficiency"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["reservoircapacity"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["initiallevel"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["enabled"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["penalize-variation-injection"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["penalize-variation-withdrawal"],"name":[10],"type":["lgl"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"0.5","4":"0","5":"0","6":"FALSE","7":"TRUE","8":"1","9":"FALSE","10":"FALSE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["efficiency"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["reservoircapacity"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["initiallevel"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["enabled"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["penalize-variation-injection"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["penalize-variation-withdrawal"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["allow-overflow"],"name":[11],"type":["lgl"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"0.5","4":"0","5":"0","6":"FALSE","7":"TRUE","8":"1","9":"FALSE","10":"FALSE","11":"FALSE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># creation</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>my_parameters <span class="ot">&lt;-</span> <span class="fu">storage_values_default</span>()</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>my_parameters<span class="sc">$</span>efficiencywithdrawal <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>my_parameters<span class="sc">$</span><span class="st">`</span><span class="at">penalize-variation-injection</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>my_parameters<span class="sc">$</span><span class="st">`</span><span class="at">penalize-variation-withdrawal</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>                <span class="at">group =</span> <span class="st">&quot;new_properties&quot;</span>, </span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters, </span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>                <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;it&quot;</span>, </span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>                <span class="at">group =</span> <span class="st">&quot;new_properties&quot;</span>, </span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters,</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>                <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co"># read cluster properties </span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># creation</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>my_parameters <span class="ot">&lt;-</span> <span class="fu">storage_values_default</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>my_parameters<span class="sc">$</span><span class="st">`</span><span class="at">allow-overflow</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                <span class="at">group =</span> <span class="st">&quot;new_properties&quot;</span>, </span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters, </span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>                <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;it&quot;</span>, </span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>, </span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                <span class="at">group =</span> <span class="st">&quot;new_properties&quot;</span>, </span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co"># read cluster properties </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["efficiency"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[8],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"new_properties","4":"1","5":"0.5","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"TRUE","11":"TRUE","12":"0","13":"0"},{"1":"it","2":"it_test_storage","3":"new_properties","4":"1","5":"0.5","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"TRUE","11":"TRUE","12":"0","13":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["allow.overflow"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["efficiency"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[12],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"new_properties","4":"TRUE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"},{"1":"it","2":"it_test_storage","3":"new_properties","4":"TRUE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># edit properties of existing st-storage cluster</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>my_parameters<span class="sc">$</span>efficiencywithdrawal <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>my_parameters<span class="sc">$</span><span class="st">`</span><span class="at">penalize-variation-injection</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>my_parameters<span class="sc">$</span><span class="st">`</span><span class="at">penalize-variation-withdrawal</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">editClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>              <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>              <span class="at">storage_parameters =</span> my_parameters)</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># read cluster properties </span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># edit properties of existing st-storage cluster</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>my_parameters<span class="sc">$</span><span class="st">`</span><span class="at">allow-overflow</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">editClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>              <span class="at">cluster_name =</span> <span class="st">&quot;test_storage&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>              <span class="at">storage_parameters =</span> my_parameters)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># read cluster properties </span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["efficiency"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[8],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"new_properties","4":"1","5":"0.9","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"FALSE","11":"FALSE","12":"0","13":"0"},{"1":"it","2":"it_test_storage","3":"new_properties","4":"1","5":"0.5","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"TRUE","11":"TRUE","12":"0","13":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["allow.overflow"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["efficiency"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[12],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"new_properties","4":"FALSE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"},{"1":"it","2":"it_test_storage","3":"new_properties","4":"TRUE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
-<div id="new-optional-time-series" class="section level3">
-<h3>New optional <strong>time series</strong></h3>
-<p>We have five new <em>.txt</em> files containing one series of
-dimension <span class="math inline">\({N=8760, P=1}\)</span> :</p>
-<ul>
-<li>cost-injection.txt<br />
-</li>
-<li>cost-withdrawal.txt</li>
-<li>cost-level.txt<br />
-</li>
-<li>cost-variation-injection.txt<br />
-</li>
-<li>cost-variation-withdrawal.txt</li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># creation</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>ratio_value <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="dv">8760</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  </span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># default properties with new optional TS</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;good_ts_value&quot;</span>, </span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                <span class="at">cost_injection =</span> ratio_value, </span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>                <span class="at">cost_withdrawal =</span> ratio_value, </span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>                <span class="at">cost_level =</span> ratio_value, </span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>                <span class="at">cost_variation_injection =</span> ratio_value,</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                <span class="at">cost_variation_withdrawal =</span> ratio_value)</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co"># read cluster TS values </span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">st_storage =</span> <span class="st">&quot;all&quot;</span>, </span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>                   <span class="at">showProgress =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(<span class="fu">head</span>(tab))</span></code></pre></div>
+<div id="new-dimension-of-time-series" class="section level3">
+<h3>New dimension of <strong>time series</strong></h3>
+<p>All matrices will be of (8760, N), noting that N &gt;= 1</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># creation</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>ratio_value <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="dv">8760</span>,<span class="dv">2</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># default properties with new optional TS</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;good_ts_value&quot;</span>, </span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                <span class="at">cost_injection =</span> ratio_value, </span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>                <span class="at">cost_withdrawal =</span> ratio_value, </span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>                <span class="at">cost_level =</span> ratio_value, </span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                <span class="at">cost_variation_injection =</span> ratio_value,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>                <span class="at">cost_variation_withdrawal =</span> ratio_value)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co"># read cluster TS values </span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">st_storage =</span> <span class="st">&quot;all&quot;</span>, </span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                   <span class="at">showProgress =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(<span class="fu">head</span>(tab))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["chr"],"align":["left"]},{"label":["timeId"],"name":[3],"type":["int"],"align":["right"]},{"label":["time"],"name":[4],"type":["dttm"],"align":["right"]},{"label":["day"],"name":[5],"type":["int"],"align":["right"]},{"label":["month"],"name":[6],"type":["fct"],"align":["left"]},{"label":["hour"],"name":[7],"type":["fct"],"align":["left"]},{"label":["tsId"],"name":[8],"type":["int"],"align":["right"]},{"label":["st-storage"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["name_file"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"fr","2":"fr_good_ts_value","3":"1","4":"2018-01-01 00:00:00","5":"1","6":"JAN","7":"00:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"2","4":"2018-01-01 01:00:00","5":"1","6":"JAN","7":"01:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"3","4":"2018-01-01 02:00:00","5":"1","6":"JAN","7":"02:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"4","4":"2018-01-01 03:00:00","5":"1","6":"JAN","7":"03:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"5","4":"2018-01-01 04:00:00","5":"1","6":"JAN","7":"04:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"6","4":"2018-01-01 05:00:00","5":"1","6":"JAN","7":"05:00","8":"1","9":"1","10":"PMAX-injection"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># edit TS values of existing st-storage cluster</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>new_ratio_value <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.85</span>, <span class="dv">8760</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># edit everything or anyone you want </span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">editClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>              <span class="at">cluster_name =</span> <span class="st">&quot;good_ts_value&quot;</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>              <span class="at">cost_injection =</span> new_ratio_value, </span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>              <span class="at">cost_withdrawal =</span> new_ratio_value)</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co"># read cluster TS values </span></span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">st_storage =</span> <span class="st">&quot;all&quot;</span>, </span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                   <span class="at">showProgress =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(<span class="fu">head</span>(tab))</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># edit TS values of existing st-storage cluster</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>new_ratio_value <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.85</span>, <span class="dv">8760</span>,<span class="dv">3</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># edit everything or anyone you want </span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">editClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>              <span class="at">cluster_name =</span> <span class="st">&quot;good_ts_value&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>              <span class="at">cost_injection =</span> new_ratio_value, </span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>              <span class="at">cost_withdrawal =</span> new_ratio_value)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co"># read cluster TS values </span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readInputTS</span>(<span class="at">st_storage =</span> <span class="st">&quot;all&quot;</span>, </span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                   <span class="at">showProgress =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(<span class="fu">head</span>(tab))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["chr"],"align":["left"]},{"label":["timeId"],"name":[3],"type":["int"],"align":["right"]},{"label":["time"],"name":[4],"type":["dttm"],"align":["right"]},{"label":["day"],"name":[5],"type":["int"],"align":["right"]},{"label":["month"],"name":[6],"type":["fct"],"align":["left"]},{"label":["hour"],"name":[7],"type":["fct"],"align":["left"]},{"label":["tsId"],"name":[8],"type":["int"],"align":["right"]},{"label":["st-storage"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["name_file"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"fr","2":"fr_good_ts_value","3":"1","4":"2018-01-01 00:00:00","5":"1","6":"JAN","7":"00:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"2","4":"2018-01-01 01:00:00","5":"1","6":"JAN","7":"01:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"3","4":"2018-01-01 02:00:00","5":"1","6":"JAN","7":"02:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"4","4":"2018-01-01 03:00:00","5":"1","6":"JAN","7":"03:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"5","4":"2018-01-01 04:00:00","5":"1","6":"JAN","7":"04:00","8":"1","9":"1","10":"PMAX-injection"},{"1":"fr","2":"fr_good_ts_value","3":"6","4":"2018-01-01 05:00:00","5":"1","6":"JAN","7":"05:00","8":"1","9":"1","10":"PMAX-injection"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1796,163 +1756,81 @@ dimension <span class="math inline">\({N=8760, P=1}\)</span> :</p>
 </div>
 <div id="additional" class="section level3">
 <h3>Additional</h3>
-<p>We can add additional constraints via the dedicated endpoints:</p>
-<ul>
-<li>constraints_properties</li>
-<li>TS constraints rhs_*</li>
-</ul>
-<p>The function read_storages_constraints() reads all short-term storage
-constraints from API or disk and returns them as a nested R list. Each
-top-level element corresponds to an area. Inside each area you will
-find, for each storage cluster, two main sub-lists:</p>
-<p>properties – general information and constraint definitions, such
-as:</p>
-<ul>
-<li>variable (e.g. “withdrawal”)</li>
-<li>operator (e.g. “equal”)</li>
-<li>hours (e.g. “[1, 3, 5]”)</li>
-<li>enabled (logical flag)</li>
-</ul>
-<p>values - time-series data linked to those constraints, for example a
-rhs_test element containing a numeric vector of hourly values (length
-8760).</p>
-<div id="properties" class="section level4">
-<h4>Properties</h4>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Create </span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;Additional_Properties&quot;</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters, </span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                <span class="at">PMAX_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                <span class="at">PMAX_withdrawal =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>                <span class="at">inflows =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>                <span class="at">lower_rule_curve =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>                <span class="at">upper_rule_curve =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>                <span class="at">cost_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>                <span class="at">cost_withdrawal =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>                <span class="at">cost_level =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>                <span class="at">cost_variation_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>                <span class="at">cost_variation_withdrawal =</span><span class="cn">NULL</span>,</span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>                <span class="at">constraints_properties =</span> <span class="fu">list</span>(</span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>                  <span class="st">&quot;test&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>                    <span class="at">variable =</span> <span class="st">&quot;withdrawal&quot;</span>,</span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>                    <span class="at">operator =</span> <span class="st">&quot;equal&quot;</span>,</span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>                    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1,3,5]&quot;</span>),</span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>                  <span class="st">&quot;test2&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>                   <span class="at">variable =</span> <span class="st">&quot;netting&quot;</span>,</span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>                   <span class="at">operator =</span> <span class="st">&quot;less&quot;</span>,</span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a>                   <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1, 168]&quot;</span>)</span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a>                 )</span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a>                  )))</span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a></span>
-<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co"># Edit </span></span>
-<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="fu">editClusterST</span> (<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>               <span class="at">cluster_name =</span> <span class="st">&quot;Additional_Properties&quot;</span>, </span>
-<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>               <span class="at">storage_parameters =</span> my_parameters, </span>
-<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>                <span class="at">PMAX_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a>                <span class="at">PMAX_withdrawal =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a>                <span class="at">inflows =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a>                <span class="at">lower_rule_curve =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a>                <span class="at">upper_rule_curve =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a>                <span class="at">cost_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a>                <span class="at">cost_withdrawal =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a>                <span class="at">cost_level =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a>                <span class="at">cost_variation_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a>                <span class="at">cost_variation_withdrawal =</span><span class="cn">NULL</span>,</span>
-<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a>               constraints_properties <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a>                 <span class="st">&quot;test&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a>                   <span class="at">variable =</span> <span class="st">&quot;withdrawal&quot;</span>,</span>
-<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a>                   <span class="at">operator =</span> <span class="st">&quot;equal&quot;</span>,</span>
-<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a>                   <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1,3,5]&quot;</span>,</span>
-<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a>                              <span class="st">&quot;[120,121,122,123,124,125,126,127,128]&quot;</span>),</span>
-<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a>                   <span class="at">enabled =</span> <span class="cn">FALSE</span></span>
-<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a>                 ),</span>
-<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a>                 <span class="st">&quot;test2&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a>                   <span class="at">variable =</span> <span class="st">&quot;netting&quot;</span>,</span>
-<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a>                   <span class="at">operator =</span> <span class="st">&quot;less&quot;</span>,</span>
-<span id="cb11-52"><a href="#cb11-52" tabindex="-1"></a>                   <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1, 168]&quot;</span>)</span>
-<span id="cb11-53"><a href="#cb11-53" tabindex="-1"></a>                 )))</span></code></pre></div>
-</div>
-<div id="values" class="section level4">
-<h4>Values</h4>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Create</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>good_ts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="at">nrow =</span> <span class="dv">8760</span>, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;Additional_Values&quot;</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters, </span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>                <span class="at">PMAX_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>                <span class="at">PMAX_withdrawal =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>                <span class="at">inflows =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>                <span class="at">lower_rule_curve =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>                <span class="at">upper_rule_curve =</span> <span class="cn">NULL</span>,</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>                <span class="at">cost_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>                <span class="at">cost_withdrawal =</span> <span class="cn">NULL</span>,</span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>                <span class="at">cost_level =</span> <span class="cn">NULL</span>,</span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>                <span class="at">cost_variation_injection =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>                <span class="at">cost_variation_withdrawal =</span><span class="cn">NULL</span>,</span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>                <span class="at">constraints_properties =</span> <span class="fu">list</span>(</span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>                  <span class="st">&quot;test&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>                    <span class="at">variable =</span> <span class="st">&quot;withdrawal&quot;</span>,</span>
-<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>                    <span class="at">operator =</span> <span class="st">&quot;equal&quot;</span>,</span>
-<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>                    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1,3,5]&quot;</span>,</span>
-<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>                              <span class="st">&quot;[120,121,122,123,124,125,126,127,128]&quot;</span>)</span>
-<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>                    <span class="co">#enabled = FALSE</span></span>
-<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>                  ),</span>
-<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>                  <span class="st">&quot;test2&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>                    <span class="at">variable =</span> <span class="st">&quot;netting&quot;</span>,</span>
-<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>                    <span class="at">operator =</span> <span class="st">&quot;less&quot;</span>,</span>
-<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>                    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1, 168]&quot;</span>)</span>
-<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>                  )),</span>
-<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>                <span class="co"># constraints_ts </span></span>
-<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>                <span class="at">constraints_ts =</span> <span class="fu">list</span>(</span>
-<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>                  <span class="st">&quot;test&quot;</span> <span class="ot">=</span> good_ts,</span>
-<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>                  <span class="st">&quot;test2&quot;</span>    <span class="ot">=</span> good_ts</span>
-<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a>                ))</span>
-<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a></span>
-<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="co"># Edit</span></span>
-<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="fu">editClusterST</span> (<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
-<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;Additional_Values&quot;</span>,</span>
-<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a>               <span class="at">constraints_ts =</span> <span class="fu">list</span>(</span>
-<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a>                 <span class="st">&quot;test&quot;</span> <span class="ot">=</span> good_ts,</span>
-<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a>                 <span class="st">&quot;test2&quot;</span>    <span class="ot">=</span> good_ts<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a>               )  ,</span>
-<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a>               <span class="at">add_prefix =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a><span class="co">#Read</span></span>
-<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a>res<span class="ot">=</span><span class="fu">read_storages_constraints</span>()</span></code></pre></div>
-<pre><code>#&gt;                           levelName
-#&gt; 1  Root                            
-#&gt; 2   °--fr                          
-#&gt; 3       ¦--fr_additional_properties
-#&gt; 4       ¦   ¦--properties          
-#&gt; 5       ¦   ¦   °--test            
-#&gt; 6       ¦   °--values              
-#&gt; 7       °--fr_additional_values    
-#&gt; 8           ¦--properties          
-#&gt; 9           ¦   ¦--test            
-#&gt; 10          ¦   °--test2           
-#&gt; 11          °--values              
-#&gt; 12              ¦--rhs_test        
-#&gt; 13              °--rhs_test2</code></pre>
-</div>
+<p>All RHS will be of (8760, N), noting that N &gt;= 1</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Create</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>good_ts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="at">nrow =</span> <span class="dv">8760</span>, <span class="at">ncol =</span><span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;RHS_new_dimensions&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                <span class="at">storage_parameters =</span> my_parameters, </span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>                <span class="at">PMAX_injection =</span> <span class="cn">NULL</span>, </span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>                <span class="at">PMAX_withdrawal =</span> <span class="cn">NULL</span>, </span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>                <span class="at">inflows =</span> <span class="cn">NULL</span>, </span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>                <span class="at">lower_rule_curve =</span> <span class="cn">NULL</span>, </span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>                <span class="at">upper_rule_curve =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>                <span class="at">cost_injection =</span> <span class="cn">NULL</span>, </span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                <span class="at">cost_withdrawal =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>                <span class="at">cost_level =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>                <span class="at">cost_variation_injection =</span> <span class="cn">NULL</span>, </span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>                <span class="at">cost_variation_withdrawal =</span><span class="cn">NULL</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>                <span class="at">constraints_properties =</span> <span class="fu">list</span>(</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>                  <span class="st">&quot;test&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>                    <span class="at">variable =</span> <span class="st">&quot;withdrawal&quot;</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>                    <span class="at">operator =</span> <span class="st">&quot;equal&quot;</span>,</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>                    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1,3,5]&quot;</span>,</span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>                              <span class="st">&quot;[120,121,122,123,124,125,126,127,128]&quot;</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>                    <span class="co">#enabled = FALSE</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>                  ),</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>                  <span class="st">&quot;test2&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>                    <span class="at">variable =</span> <span class="st">&quot;netting&quot;</span>,</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>                    <span class="at">operator =</span> <span class="st">&quot;less&quot;</span>,</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>                    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1, 168]&quot;</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a>                  )),</span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a>                <span class="co"># constraints_ts </span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a>                <span class="at">constraints_ts =</span> <span class="fu">list</span>(</span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a>                  <span class="st">&quot;test&quot;</span> <span class="ot">=</span> good_ts,</span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a>                  <span class="st">&quot;test2&quot;</span>    <span class="ot">=</span> good_ts</span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a>                ))</span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co"># Edit</span></span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a>good_ts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="at">nrow =</span> <span class="dv">8760</span>, <span class="at">ncol =</span><span class="dv">2</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="fu">editClusterST</span> (<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;RHS_new_dimensions&quot;</span>,</span>
+<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a>               <span class="at">constraints_ts =</span> <span class="fu">list</span>(</span>
+<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a>                 <span class="st">&quot;test&quot;</span> <span class="ot">=</span> good_ts,</span>
+<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a>                 <span class="st">&quot;test2&quot;</span>    <span class="ot">=</span> good_ts</span>
+<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a>               )  ,</span>
+<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a>               <span class="at">add_prefix =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a><span class="co">#Read</span></span>
+<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a>res<span class="ot">=</span><span class="fu">read_storages_constraints</span>()</span></code></pre></div>
+<pre><code>#&gt;                       levelName
+#&gt; 1 Root                         
+#&gt; 2  °--fr                       
+#&gt; 3      °--fr_rhs_new_dimensions
+#&gt; 4          ¦--properties       
+#&gt; 5          ¦   ¦--test         
+#&gt; 6          ¦   °--test2        
+#&gt; 7          °--values           
+#&gt; 8              ¦--rhs_test     
+#&gt; 9              °--rhs_test2</code></pre>
 </div>
 <div id="remove-clusters" class="section level3">
 <h3>Remove clusters</h3>
 <p>Nothing has changed to remove clusters.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># read cluster names</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">readClusterSTDesc</span>()<span class="sc">$</span>cluster)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;fr_additional_properties&quot; &quot;fr_additional_values&quot;    </span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [3] &quot;fr_good_ts_value&quot;         &quot;fr_test_storage&quot;         </span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; [5] &quot;it_test_storage&quot;</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># remove a cluster</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">removeClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;good_ts_value&quot;</span>)</span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co"># read cluster </span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># read cluster names</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">readClusterSTDesc</span>()<span class="sc">$</span>cluster)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;fr_good_ts_value&quot;      &quot;fr_rhs_new_dimensions&quot; &quot;fr_test_storage&quot;      </span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; [4] &quot;it_test_storage&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># remove a cluster</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">removeClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>, </span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;good_ts_value&quot;</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co"># read cluster </span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">readClusterSTDesc</span>()</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(tab)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["efficiency"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[8],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"new_properties","4":"1","5":"0.9","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"FALSE","11":"FALSE","12":"0","13":"0"},{"1":"fr","2":"fr_additional_properties","3":"list(variable","4":"1","5":"0.9","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"FALSE","11":"FALSE","12":"0","13":"0"},{"1":"fr","2":"fr_additional_values","3":"Other1","4":"1","5":"0.9","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"FALSE","11":"FALSE","12":"0","13":"0"},{"1":"it","2":"it_test_storage","3":"new_properties","4":"1","5":"0.5","6":"TRUE","7":"0.5","8":"FALSE","9":"0","10":"TRUE","11":"TRUE","12":"0","13":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["area"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cluster"],"name":[2],"type":["fct"],"align":["left"]},{"label":["group"],"name":[3],"type":["chr"],"align":["left"]},{"label":["allow.overflow"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["efficiency"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["efficiencywithdrawal"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["enabled"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["initiallevel"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["initialleveloptim"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["injectionnominalcapacity"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["penalize.variation.injection"],"name":[11],"type":["lgl"],"align":["right"]},{"label":["penalize.variation.withdrawal"],"name":[12],"type":["lgl"],"align":["right"]},{"label":["reservoircapacity"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["withdrawalnominalcapacity"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"fr","2":"fr_test_storage","3":"new_properties","4":"FALSE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"},{"1":"fr","2":"fr_rhs_new_dimensions","3":"Other1","4":"FALSE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"},{"1":"it","2":"it_test_storage","3":"new_properties","4":"TRUE","5":"1","6":"1","7":"TRUE","8":"0.5","9":"FALSE","10":"0","11":"FALSE","12":"FALSE","13":"0","14":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -1961,67 +1839,190 @@ rhs_test element containing a numeric vector of hourly values (length
 <h2>Generaldata</h2>
 <p>The “generaldata.ini” settings file
 (<em>settings/generaldata.ini</em>) contains several sections.</p>
-<p>Antares Simulator v9.2 deletes some parameters:</p>
+<p>Antares Simulator v9.3 deletes some parameters:</p>
 <ul>
-<li><em>adequacy patch/enable-first-step</em></li>
-<li><em>adequacy
-patch/set-to-null-ntc-between-physical-out-for-first-step</em></li>
-<li><em>other preferences/initial-reservoir-levels</em></li>
+<li><em>general/refreshtimeseries</em></li>
+<li><em>general/refreshintervalload</em></li>
+<li><em>general/refreshintervalhydro</em></li>
+<li><em>general/refreshintervalwind</em></li>
+<li><em>general/refreshintervalthermal</em></li>
+<li><em>general/refreshintervalsolar</em></li>
 </ul>
-<p>A message is displayed and parameters are set to <code>NULL</code>
-for the <code>[adequacy patch]</code> section.</p>
-<p>For the <code>[other preferences]</code> section, the
-<code>initial-reservoir-levels</code> parameter is not explicitly used
-by a dedicated function.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># user messages</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">updateAdequacySettings</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="at">set_to_null_ntc_between_physical_out_for_first_step =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; Warning: The `set_to_null_ntc_between_physical_out_for_first_step` argument of</span></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; `updateAdequacySettings()` is deprecated as of antaresEditObject 2.9.2.</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter are no longer supported for an Antares version &gt;= &#39;9.2&#39;, the</span></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt;   values will be ignored.</span></span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="fu">updateAdequacySettings</span>(<span class="at">enable_first_step =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; Warning: The `enable_first_step` argument of `updateAdequacySettings()` is deprecated as</span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; of antaresEditObject 2.9.2.</span></span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter are no longer supported for an Antares version &gt;= &#39;9.2&#39;, the</span></span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt;   values will be ignored.</span></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
-<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
-<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; generated.</span></span></code></pre></div>
+<p>A message is displayed.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># user messages</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">updateGeneralSettings</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">refreshtimeseries =</span> <span class="dv">100</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">refreshintervalload =</span> <span class="dv">100</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="at">refreshintervalhydro =</span> <span class="dv">100</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="at">refreshintervalwind =</span> <span class="dv">100</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="at">refreshintervalthermal =</span> <span class="dv">100</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="at">refreshintervalsolar =</span> <span class="dv">100</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshtimeseries` argument of `updateGeneralSettings()` is deprecated as</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; of antaresEditObject 9.3.</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalload` argument of `updateGeneralSettings()` is deprecated</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalhydro` argument of `updateGeneralSettings()` is deprecated</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalwind` argument of `updateGeneralSettings()` is deprecated</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalthermal` argument of `updateGeneralSettings()` is</span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; deprecated as of antaresEditObject 9.3.</span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalsolar` argument of `updateGeneralSettings()` is deprecated</span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt; generated.</span></span></code></pre></div>
 </div>
 <div id="scenario-builder" class="section level2">
 <h2>Scenario builder</h2>
-<p>The scenario builder allows you to use a new code <code>hfl</code>
-for ‘hydro final level’. This new feature is similar to <code>hl</code>
-(‘hydro levels’) and is used in the same way with the
-‘coef_hydro_levels’ parameter.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># the number of coeff is equivalent to the number of areas</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  my_coef <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fu">length</span>(<span class="fu">getAreas</span>()))</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  </span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  opts <span class="ot">&lt;-</span> <span class="fu">simOptions</span>()</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  </span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="co"># build data </span></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  ldata <span class="ot">&lt;-</span> <span class="fu">scenarioBuilder</span>(</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>    <span class="at">n_scenario =</span> <span class="dv">10</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>    <span class="at">n_mc =</span> <span class="dv">10</span>,</span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>    <span class="at">areas =</span> <span class="fu">getAreas</span>(),</span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>    <span class="at">coef_hydro_levels =</span> my_coef</span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  )</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt; Warning: Specified number of Monte-Carlo years differ from the one in Antares</span></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt; general parameter</span></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  </span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="co"># update scenearionbuilder.dat</span></span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="fu">updateScenarioBuilder</span>(<span class="at">ldata =</span> ldata,</span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>                        <span class="at">series =</span> <span class="st">&quot;hfl&quot;</span>)</span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>  </span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>  <span class="fu">readScenarioBuilder</span>(<span class="at">as_matrix =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt; $hfl</span></span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;         [,1]</span></span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt; fr 0.9070904</span></span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt; it 0.5698023</span></span></code></pre></div>
+<p>The scenario builder allows you to use a new code <code>sts</code>
+for short-term storage inflows in the following format :
+sts,area,year,storage = TS number. The scenario builder allows you to
+use a new code <code>sta</code> for short-term storage additional
+constraints in the following format : sta,area,year,storage,constraint =
+TS number.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#Add sts</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>                <span class="at">cluster_name =</span> <span class="st">&quot;Scenario_builder_sts&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a> </span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>ldata <span class="ot">&lt;-</span> <span class="fu">scenarioBuilder</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="at">n_scenario =</span> <span class="dv">5</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">n_mc =</span> <span class="dv">5</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="at">areas =</span> <span class="st">&quot;fr&quot;</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; Warning: Specified number of Monte-Carlo years differ from the one in Antares</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; general parameter</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a> </span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="fu">updateScenarioBuilder</span>(<span class="at">ldata =</span> ldata,</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>                      <span class="at">series =</span> <span class="st">&quot;sts&quot;</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#Add sta</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>name_no_prefix <span class="ot">&lt;-</span> <span class="st">&quot;add_constraints_sta&quot;</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a> </span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>constraints_properties <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>  <span class="st">&quot;withdrawal-1&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>    <span class="at">variable =</span> <span class="st">&quot;withdrawal&quot;</span>,</span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a>    <span class="at">operator =</span> <span class="st">&quot;equal&quot;</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a>    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1,3,5]&quot;</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a>              <span class="st">&quot;[120,121,122,123,124,125,126,127,128]&quot;</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a>  ),</span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a>  <span class="st">&quot;netting-1&quot;</span><span class="ot">=</span><span class="fu">list</span>(</span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a>    <span class="at">variable =</span> <span class="st">&quot;netting&quot;</span>,</span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a>    <span class="at">operator =</span> <span class="st">&quot;less&quot;</span>,</span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>    <span class="at">hours =</span> <span class="fu">c</span>(<span class="st">&quot;[1, 168]&quot;</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a>  ))</span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a> </span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="fu">createClusterST</span>(<span class="at">area =</span> <span class="st">&quot;fr&quot;</span>,</span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a>                <span class="at">cluster_name =</span> name_no_prefix,</span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a>                <span class="at">constraints_properties =</span> constraints_properties)</span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a> </span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a>ldata <span class="ot">&lt;-</span> <span class="fu">scenarioBuilder</span>(</span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a>  <span class="at">n_scenario =</span> <span class="dv">5</span>,</span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a>  <span class="at">n_mc =</span> <span class="dv">5</span>,</span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a>  <span class="at">areas =</span> <span class="st">&quot;fr&quot;</span></span>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a>)</span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt; Warning: Specified number of Monte-Carlo years differ from the one in Antares</span></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt; general parameter</span></span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a> </span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="fu">updateScenarioBuilder</span>(<span class="at">ldata =</span> ldata,</span>
+<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a>                      <span class="at">series =</span> <span class="st">&quot;sta&quot;</span>)</span>
+<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a>  </span>
+<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="fu">readScenarioBuilder</span>(<span class="at">as_matrix =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="co">#&gt; $sta</span></span>
+<span id="cb14-49"><a href="#cb14-49" tabindex="-1"></a><span class="co">#&gt;                                        [,1]</span></span>
+<span id="cb14-50"><a href="#cb14-50" tabindex="-1"></a><span class="co">#&gt; fr_fr_add_constraints_sta_netting-1       1</span></span>
+<span id="cb14-51"><a href="#cb14-51" tabindex="-1"></a><span class="co">#&gt; fr_fr_add_constraints_sta_withdrawal-1    1</span></span>
+<span id="cb14-52"><a href="#cb14-52" tabindex="-1"></a><span class="co">#&gt; fr_fr_rhs_new_dimensions_test             1</span></span>
+<span id="cb14-53"><a href="#cb14-53" tabindex="-1"></a><span class="co">#&gt; fr_fr_rhs_new_dimensions_test2            1</span></span>
+<span id="cb14-54"><a href="#cb14-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-55"><a href="#cb14-55" tabindex="-1"></a><span class="co">#&gt; $sts</span></span>
+<span id="cb14-56"><a href="#cb14-56" tabindex="-1"></a><span class="co">#&gt;                            [,1]</span></span>
+<span id="cb14-57"><a href="#cb14-57" tabindex="-1"></a><span class="co">#&gt; fr_fr_add_constraints_sta    NA</span></span>
+<span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a><span class="co">#&gt; fr_fr_rhs_new_dimensions      1</span></span>
+<span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a><span class="co">#&gt; fr_fr_scenario_builder_sts    1</span></span>
+<span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a><span class="co">#&gt; fr_fr_test_storage            1</span></span>
+<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="co">#&gt; it_it_test_storage           NA</span></span></code></pre></div>
+</div>
+<div id="thematic" class="section level2">
+<h2>Thematic</h2>
+<p>In settings/generaldata.ini, in section variables selection, the
+following variables were removed:</p>
+<ul>
+<li><em>variables selection/NUCLEAR</em></li>
+<li><em>variables selection/LIGNITE</em></li>
+<li><em>variables selection/COAL</em></li>
+<li><em>variables selection/BATTERY</em></li>
+<li><em>variables selection/GAS</em></li>
+<li><em>variables selection/OIL</em></li>
+<li><em>variables selection/MIX. FUEL</em></li>
+<li><em>variables selection/MISC. DTG</em></li>
+<li><em>variables selection/MISC. DTG 2</em></li>
+<li><em>variables selection/MISC. DTG 3</em></li>
+<li><em>variables selection/MISC. DTG 4</em> They’re replaced by the
+dynamic variable DISPATCH. GEN.</li>
+</ul>
+<p>The following variables were removed:</p>
+<ul>
+<li><em>variables selection/WIND OFFSHORE</em></li>
+<li><em>variables selection/WIND ONSHORE</em></li>
+<li><em>variables selection/SOLAR CONCRT.</em></li>
+<li><em>variables selection/SOLAR PV</em></li>
+<li><em>variables selection/SOLAR ROOFT</em></li>
+<li><em>variables selection/RENW. 1</em></li>
+<li><em>variables selection/RENW. 2</em></li>
+<li><em>variables selection/RENW. 3</em></li>
+<li><em>variables selection/RENW. 4</em> They’re replaced by the dynamic
+variable RENEWABLE GEN.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#List of variables version &gt;=9.3</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>vector_select_vars<span class="ot">=</span> <span class="fu">list_thematic_variables</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#Add all variables</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>list_thematic<span class="ot">=</span><span class="fu">setThematicTrimming</span>(<span class="at">selection_variables =</span> vector_select_vars<span class="sc">$</span>col_name[<span class="dv">68</span><span class="sc">:</span><span class="dv">72</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>list_thematic<span class="sc">$</span>parameters<span class="sc">$</span><span class="st">`</span><span class="at">variables selection</span><span class="st">`</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; $selected_vars_reset</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; $`select_var +`</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;MIN DTG by plant&quot;</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; $`select_var +`</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;STS BY GROUP&quot;</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; $`select_var +`</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;UNSP ENRG CSR&quot;</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; $`select_var +`</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt; [1] &quot;DISPATCH. GEN.&quot;</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; $`select_var +`</span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a><span class="co">#&gt; [1] &quot;RENEWABLE GEN.&quot;</span></span></code></pre></div>
 </div>
 
 

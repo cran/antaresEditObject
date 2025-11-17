@@ -11,8 +11,8 @@ library(antaresEditObject)
 dir_path <- tempdir()
 suppressWarnings(
   createStudy(path = dir_path, 
-            study_name = "test920", 
-            antares_version = "9.2")
+            study_name = "test930", 
+            antares_version = "9.3")
 )
 
 
@@ -24,25 +24,6 @@ current_study_opts$antaresVersion
 createArea(name = "fr")
 createArea(name = "it")
 
-## ----st-storage/group---------------------------------------------------------
-# creation
-createClusterST(area = "fr", 
-                cluster_name = "test_storage", 
-                group = "my_own_group")
-
-createClusterST(area = "it", 
-                cluster_name = "test_storage", 
-                group = "my_own_group_again")
-
-# edit group of existing st-storage cluster
-editClusterST(area = "fr", 
-              cluster_name = "test_storage", 
-              group = "my_own_group_Pondage")
-
-# read cluster properties
-tab <- readClusterSTDesc()
-rmarkdown::paged_table(tab)
-
 ## ----default values-----------------------------------------------------------
 # new properties (default values)
 rmarkdown::paged_table(as.data.frame(storage_values_default(), check.names = FALSE))
@@ -50,9 +31,7 @@ rmarkdown::paged_table(as.data.frame(storage_values_default(), check.names = FAL
 ## ----creation/properties------------------------------------------------------
 # creation
 my_parameters <- storage_values_default()
-my_parameters$efficiencywithdrawal <- 0.5
-my_parameters$`penalize-variation-injection` <- TRUE
-my_parameters$`penalize-variation-withdrawal` <- TRUE
+my_parameters$`allow-overflow` <- TRUE
 
 createClusterST(area = "fr", 
                 cluster_name = "test_storage", 
@@ -72,9 +51,7 @@ rmarkdown::paged_table(tab)
 
 ## ----edit/properties----------------------------------------------------------
 # edit properties of existing st-storage cluster
-my_parameters$efficiencywithdrawal <- 0.9
-my_parameters$`penalize-variation-injection` <- FALSE
-my_parameters$`penalize-variation-withdrawal` <- FALSE
+my_parameters$`allow-overflow` <- FALSE
 
 editClusterST(area = "fr", 
               cluster_name = "test_storage",
@@ -86,7 +63,7 @@ rmarkdown::paged_table(tab)
 
 ## ----create/ts----------------------------------------------------------------
 # creation
-ratio_value <- matrix(0.7, 8760)
+ratio_value <- matrix(0.7, 8760,2)
   
 # default properties with new optional TS
 createClusterST(area = "fr", 
@@ -104,7 +81,7 @@ rmarkdown::paged_table(head(tab))
 
 ## ----edit/ts------------------------------------------------------------------
 # edit TS values of existing st-storage cluster
-new_ratio_value <- matrix(0.85, 8760)
+new_ratio_value <- matrix(0.85, 8760,3)
 
 # edit everything or anyone you want 
 editClusterST(area = "fr",
@@ -118,66 +95,10 @@ tab <- readInputTS(st_storage = "all",
 rmarkdown::paged_table(head(tab))
 
 ## ----message=FALSE------------------------------------------------------------
-# Create 
-createClusterST(area = "fr",
-                cluster_name = "Additional_Properties",
-                storage_parameters = my_parameters, 
-                PMAX_injection = NULL, 
-                PMAX_withdrawal = NULL, 
-                inflows = NULL, 
-                lower_rule_curve = NULL, 
-                upper_rule_curve = NULL,
-                cost_injection = NULL, 
-                cost_withdrawal = NULL,
-                cost_level = NULL,
-                cost_variation_injection = NULL, 
-                cost_variation_withdrawal =NULL,
-                constraints_properties = list(
-                  "test"=list(
-                    variable = "withdrawal",
-                    operator = "equal",
-                    hours = c("[1,3,5]"),
-                  "test2"=list(
-                   variable = "netting",
-                   operator = "less",
-                   hours = c("[1, 168]")
-                 )
-                  )))
-
-# Edit 
-editClusterST (area = "fr", 
-               cluster_name = "Additional_Properties", 
-               storage_parameters = my_parameters, 
-                PMAX_injection = NULL, 
-                PMAX_withdrawal = NULL, 
-                inflows = NULL, 
-                lower_rule_curve = NULL, 
-                upper_rule_curve = NULL,
-                cost_injection = NULL, 
-                cost_withdrawal = NULL,
-                cost_level = NULL,
-                cost_variation_injection = NULL, 
-                cost_variation_withdrawal =NULL,
-               constraints_properties <- list(
-                 "test"=list(
-                   variable = "withdrawal",
-                   operator = "equal",
-                   hours = c("[1,3,5]",
-                              "[120,121,122,123,124,125,126,127,128]"),
-                   enabled = FALSE
-                 ),
-                 "test2"=list(
-                   variable = "netting",
-                   operator = "less",
-                   hours = c("[1, 168]")
-                 )))
-
-
-## ----message=FALSE------------------------------------------------------------
 # Create
-good_ts <- matrix(0.7, nrow = 8760, ncol = 1)
+good_ts <- matrix(0.7, nrow = 8760, ncol =3)
 createClusterST(area = "fr",
-                cluster_name = "Additional_Values",
+                cluster_name = "RHS_new_dimensions",
                 storage_parameters = my_parameters, 
                 PMAX_injection = NULL, 
                 PMAX_withdrawal = NULL, 
@@ -209,11 +130,12 @@ createClusterST(area = "fr",
                 ))
 
 # Edit
+good_ts <- matrix(0.7, nrow = 8760, ncol =2)
 editClusterST (area = "fr",
-                cluster_name = "Additional_Values",
+                cluster_name = "RHS_new_dimensions",
                constraints_ts = list(
                  "test" = good_ts,
-                 "test2"    = good_ts+1
+                 "test2"    = good_ts
                )  ,
                add_prefix = TRUE)
 #Read
@@ -237,29 +159,66 @@ rmarkdown::paged_table(tab)
 
 ## ----generaldata--------------------------------------------------------------
 # user messages
-updateAdequacySettings(
-    set_to_null_ntc_between_physical_out_for_first_step = FALSE)
-updateAdequacySettings(enable_first_step = FALSE)
+updateGeneralSettings(
+  refreshtimeseries = 100,
+  refreshintervalload = 100,
+  refreshintervalhydro = 100,
+  refreshintervalwind = 100,
+  refreshintervalthermal = 100,
+  refreshintervalsolar = 100)
+ 
 
 ## ----scenariobuilder----------------------------------------------------------
-# the number of coeff is equivalent to the number of areas
-  my_coef <- runif(length(getAreas()))
+#Add sts
+createClusterST(area = "fr",
+                cluster_name = "Scenario_builder_sts")
+ 
+ldata <- scenarioBuilder(
+  n_scenario = 5,
+  n_mc = 5,
+  areas = "fr"
+)
+ 
+updateScenarioBuilder(ldata = ldata,
+                      series = "sts")
+
+#Add sta
+name_no_prefix <- "add_constraints_sta"
+ 
+constraints_properties <- list(
+  "withdrawal-1"=list(
+    variable = "withdrawal",
+    operator = "equal",
+    hours = c("[1,3,5]",
+              "[120,121,122,123,124,125,126,127,128]")
+  ),
+  "netting-1"=list(
+    variable = "netting",
+    operator = "less",
+    hours = c("[1, 168]")
+  ))
+ 
+createClusterST(area = "fr",
+                cluster_name = name_no_prefix,
+                constraints_properties = constraints_properties)
+ 
+ldata <- scenarioBuilder(
+  n_scenario = 5,
+  n_mc = 5,
+  areas = "fr"
+)
+ 
+updateScenarioBuilder(ldata = ldata,
+                      series = "sta")
   
-  opts <- simOptions()
-  
-  # build data 
-  ldata <- scenarioBuilder(
-    n_scenario = 10,
-    n_mc = 10,
-    areas = getAreas(),
-    coef_hydro_levels = my_coef
-  )
-  
-  # update scenearionbuilder.dat
-  updateScenarioBuilder(ldata = ldata,
-                        series = "hfl")
-  
-  readScenarioBuilder(as_matrix = TRUE)
+readScenarioBuilder(as_matrix = TRUE) 
+
+## -----------------------------------------------------------------------------
+#List of variables version >=9.3
+vector_select_vars= list_thematic_variables()
+#Add all variables
+list_thematic=setThematicTrimming(selection_variables = vector_select_vars$col_name[68:72])
+list_thematic$parameters$`variables selection`
 
 ## ----delete study, include=FALSE----------------------------------------------
 # Delete study
