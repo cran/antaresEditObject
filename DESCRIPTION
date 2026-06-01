@@ -1,7 +1,7 @@
 Package: antaresEditObject
 Type: Package
 Title: Edit an 'Antares' Simulation
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Tatiana", "Vargas", email = "tatiana.vargas@rte-france.com", role = c("aut", "cre")),
     person("Frederic", "Breant", role = "ctb"),
@@ -30,11 +30,11 @@ RoxygenNote: 7.2.2
 Depends: antaresRead (>= 2.4.2)
 Imports: assertthat, cli, data.table, httr, grDevices, jsonlite,
         whisker, doParallel, doFuture, memuse, progressr, pbapply,
-        parallel, future, plyr, yaml, lifecycle
+        parallel, future, plyr, yaml, lifecycle, zip
 Suggests: testthat, covr, knitr, rmarkdown, data.tree
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2026-02-03 10:28:09 UTC; berthetcle
+Packaged: 2026-06-01 09:28:19 UTC; berthetcle
 Author: Tatiana Vargas [aut, cre],
   Frederic Breant [ctb],
   Victor Perrier [ctb],
@@ -52,4 +52,4 @@ Author: Tatiana Vargas [aut, cre],
   RTE [cph]
 Maintainer: Tatiana Vargas <tatiana.vargas@rte-france.com>
 Repository: CRAN
-Date/Publication: 2026-02-03 10:50:02 UTC
+Date/Publication: 2026-06-01 10:20:02 UTC

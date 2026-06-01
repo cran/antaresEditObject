@@ -52,6 +52,8 @@
 #' @importFrom assertthat assert_that
 #' @importFrom stats setNames
 #' @importFrom utils read.table write.table
+#' @importFrom data.table fwrite as.data.table
+#' @importFrom antaresRead simOptions setSimulationPath readIniFile
 #'
 #' @examples
 #' \dontrun{
@@ -93,38 +95,17 @@ createLink <- function(from,
   v7 <- is_antares_v7(opts)
   v820 <- is_antares_v820(opts)
   
-  # check number of columns in datalink according to antares version
   if (!is.null(dataLink)) {
-    if (v820) {
-      assertthat::assert_that(ncol(dataLink) == 8 | ncol(dataLink) == 6)
-    } else if (v7) {
-      assertthat::assert_that(ncol(dataLink) == 8)
-    } else {
-      assertthat::assert_that(ncol(dataLink) == 5)
-    }
+    .control_dataLink_time_series_dimensions(dataLink = dataLink, v820 = v820, v7 = v7)
   }
   
-  # tsLink should be provided with an even number of columns and only with antares >= 820
   if (!is.null(tsLink)) {
-    if (v820) {
-      stopifnot(
-        "tsLink must have an even number of columns" = identical(ncol(tsLink) %% 2, 0)
-      )
-    } else {
-      warning("tsLink will be ignored since Antares version < 820.", call. = FALSE)
-    }
+    .control_tsLink_time_series_dimensions(tsLink = tsLink, v820 = v820)
   }
-  
   
   # set initialization data if not provided
   if (is.null(dataLink)) {
-    if (v820) {
-      dataLink <- matrix(data = rep(0, 8760*6), ncol = 6)
-    } else if (v7) {
-      dataLink <- matrix(data = c(rep(1, 8760*2), rep(0, 8760*6)), ncol = 8)
-    } else {
-      dataLink <- matrix(data = c(rep(1, 8760*2), rep(0, 8760*3)), ncol = 5)
-    }
+    dataLink <- .initialize_dataLink_time_series(v820 = v820, v7 = v7)
   } else {
     if (v820 & ncol(dataLink) == 8) {
       if (!is.null(tsLink)) {
@@ -329,3 +310,66 @@ propertiesLinkOptions <- function(hurdles_cost = FALSE,
   )
 }
 
+
+#' @title Control the dimensions of the time series dataLink. 8760 rows and a specific number of columns expected.
+#'
+#' @param dataLink a time series for the link parameters
+#' @param v820 logical, is study with Antares version >= 820 ?
+#' @param v7 logical, is study with Antares version >= 700 ?
+#'
+#' @importFrom assertthat assert_that
+#'
+#' @keywords internal
+#' @noRd
+.control_dataLink_time_series_dimensions <- function(dataLink, v820, v7) {
+  
+  assert_that(nrow(dataLink) == 8760, msg = "dataLink is an hourly data and must have 8760 rows")
+  if (v820) {
+    assert_that(ncol(dataLink) == 8 | ncol(dataLink) == 6)
+  } else if (v7) {
+    assert_that(ncol(dataLink) == 8)
+  } else {
+    assert_that(ncol(dataLink) == 5)
+  }
+}
+
+
+#' @title Control the dimensions of the time series tsLink. 8760 rows and even number of columns expected.
+#'
+#' @param tsLink a time series for the link capacities
+#' @param v820 logical, is study with Antares version >= 820 ?
+#'
+#' @importFrom assertthat assert_that
+#'
+#' @keywords internal
+#' @noRd
+.control_tsLink_time_series_dimensions <- function(tsLink, v820) {
+  
+  if (v820) {
+    stopifnot(
+      "tsLink must have an even number of columns" = identical(ncol(tsLink) %% 2, 0)
+    )
+    assert_that(nrow(tsLink) == 8760, msg = "tsLink is an hourly data and must have 8760 rows")
+  } else {
+    warning("tsLink will be ignored since Antares version < 820.", call. = FALSE)
+  }
+}
+
+
+#' @title Initialize the time series dataLink by version.
+#'
+#' @param v820 logical, is study with Antares version >= 820 ?
+#' @param v7 logical, is study with Antares version >= 700 ?
+#'
+#' @keywords internal
+#' @noRd
+.initialize_dataLink_time_series <- function(v820, v7) {
+  
+  if (v820) {
+    return(matrix(data = rep(0, 8760*6), ncol = 6))
+  } else if (v7) {
+    return(matrix(data = c(rep(1, 8760*2), rep(0, 8760*6)), ncol = 8))
+  } else {
+    return(matrix(data = c(rep(1, 8760*2), rep(0, 8760*3)), ncol = 5))
+  }
+}

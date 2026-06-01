@@ -109,9 +109,25 @@ test_that("Check if createLink() in version >= 8.2 writes time series link in th
   nb_cols <- length(dat_mat)
   mat_multi_scen <- matrix(data = rep(dat_mat, each = 8760), ncol = nb_cols)
   mat_multi_scen_inv <- matrix(data = rep(dat_mat_inv, each = 8760), ncol = nb_cols)
+  mat_ts_and_dataLink <- matrix(0, nrow = 8760L, ncol = 8)
+  mat_ts_and_dataLink[, 1] <- 100
+  mat_ts_and_dataLink[, 2] <- 100
+  mat_ts_and_dataLink[, 3] <- 0.5
+  mat_ts_and_dataLink[, 4] <- 0.5
   
   path_direct_link_file <- file.path(opts$inputPath, "links", area, "capacities", paste0(area2,"_direct.txt"))
   path_indirect_link_file <- file.path(opts$inputPath, "links", area, "capacities", paste0(area2,"_indirect.txt"))
+  
+  # not expected format ----
+  expect_error(
+    createLink(from = area, to = area2, opts = opts, tsLink = head(mat_multi_scen,10), overwrite = TRUE),
+    regexp = "tsLink is an hourly data and must have 8760 rows"
+  )
+  
+  expect_error(
+    createLink(from = area, to = area2, opts = opts, dataLink = matrix(data = rep(0, 8759 * 6), ncol = 6), overwrite = TRUE),
+    regexp = "dataLink is an hourly data and must have 8760 rows"
+  )
   
   # alphabetical order ----
   createLink(from = area, to = area2, opts = opts, tsLink = mat_multi_scen, overwrite = TRUE)
@@ -164,6 +180,36 @@ test_that("Check if createLink() in version >= 8.2 writes time series link in th
                                            file = path_direct_link_file),
                as.data.table(mat_multi_scen[,seq((nb_cols/2)+1, nb_cols)]))
 
+  # dataLink and tsLink in one matrix
+  createLink(from = area, to = area2, opts = opts, dataLink = mat_ts_and_dataLink, overwrite = TRUE)
+  
+  # first column goes to direct file for capacities
+  expect_equal(antaresRead:::fread_antares(opts = opts,
+                                           file = path_indirect_link_file),
+               as.data.table(mat_ts_and_dataLink[,1]))
+  
+  # second column goes to indirect file for capacities
+  expect_equal(antaresRead:::fread_antares(opts = opts,
+                                           file = path_direct_link_file),
+               as.data.table(mat_ts_and_dataLink[,2]))
+  
+  mat_ts_and_dataLink <- matrix(0, nrow = 8760L, ncol = 8)
+  mat_ts_and_dataLink[, 1] <- 200
+  mat_ts_and_dataLink[, 2] <- 200
+  mat_ts_and_dataLink[, 3] <- 0.5
+  mat_ts_and_dataLink[, 4] <- 0.5
+  
+  editLink(from = area, to = area2, opts = opts, dataLink = mat_ts_and_dataLink)
+
+  # first column goes to direct file for capacities
+  expect_equal(antaresRead:::fread_antares(opts = opts,
+                                           file = path_indirect_link_file),
+               as.data.table(mat_ts_and_dataLink[,1]))
+  
+  # second column goes to indirect file for capacities
+  expect_equal(antaresRead:::fread_antares(opts = opts,
+                                           file = path_direct_link_file),
+               as.data.table(mat_ts_and_dataLink[,2]))  
 })
 
 
@@ -312,3 +358,64 @@ test_that("removeLink() : link is not removed if it is referenced in a binding c
   
   unlink(x = opts$studyPath, recursive = TRUE)
 })
+
+
+test_that("General behaviour of .control_tsLink_time_series_dimensions()", {
+  
+  ts <- matrix(data = rep(0, 8760*2), ncol = 2)
+  expect_no_error(.control_tsLink_time_series_dimensions(tsLink = ts, v820 = TRUE))
+  expect_error(.control_tsLink_time_series_dimensions(tsLink = as.matrix(ts[1,]), v820 = TRUE), regexp = "tsLink must have an even number of columns")
+  expect_error(.control_tsLink_time_series_dimensions(tsLink = head(ts,8759), v820 = TRUE), regexp = "tsLink is an hourly data and must have 8760 rows")
+  
+  expect_warning(.control_tsLink_time_series_dimensions(tsLink = ts, v820 = FALSE), regexp = "tsLink will be ignored since Antares version < 820")
+  expect_warning(.control_tsLink_time_series_dimensions(tsLink = head(ts,8759), v820 = FALSE), regexp = "tsLink will be ignored since Antares version < 820")
+  expect_warning(.control_tsLink_time_series_dimensions(tsLink =  as.matrix(ts[1,]), v820 = FALSE), regexp = "tsLink will be ignored since Antares version < 820")
+})
+
+
+test_that("General behaviour of .control_dataLink_time_series_dimensions()", {
+  
+  ts <- matrix(data = rep(0, 8760*8), ncol = 8)
+  
+  # expected number of rows by version
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts, v820 = TRUE, v7 = TRUE))
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,6)], v820 = TRUE, v7 = TRUE))
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,8)], v820 = FALSE, v7 = TRUE))
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,5)], v820 = FALSE, v7 = FALSE))
+  
+  # bad number of rows by version
+  expect_error(.control_dataLink_time_series_dimensions(dataLink = head(ts,8759), v820 = TRUE, v7 = TRUE),
+               regexp = "dataLink is an hourly data and must have 8760 rows"
+              )
+  expect_error(.control_dataLink_time_series_dimensions(dataLink = head(ts,8759), v820 = FALSE, v7 = TRUE),
+               regexp = "dataLink is an hourly data and must have 8760 rows"
+              )
+  expect_error(.control_dataLink_time_series_dimensions(dataLink = head(ts,8759), v820 = FALSE, v7 = FALSE),
+               regexp = "dataLink is an hourly data and must have 8760 rows"
+              )
+  
+  # expected number of columns by version
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts, v820 = TRUE, v7 = TRUE))
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,6)], v820 = TRUE, v7 = TRUE))
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts, v820 = FALSE, v7 = TRUE))
+  expect_no_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,5)], v820 = FALSE, v7 = FALSE))
+  
+  # bad number of columns by version
+  expect_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,7)], v820 = TRUE, v7 = TRUE))
+  expect_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,7)], v820 = FALSE, v7 = TRUE))
+  expect_error(.control_dataLink_time_series_dimensions(dataLink = ts[,seq(1,7)], v820 = FALSE, v7 = FALSE))
+})
+
+
+test_that("General behaviour of .initialize_dataLink_time_series()", {
+  
+  dataLink <- .initialize_dataLink_time_series(v820 = TRUE, v7 = TRUE)
+  expect_equal(dataLink, matrix(data = rep(0, 8760*6), ncol = 6))
+  
+  dataLink <- .initialize_dataLink_time_series(v820 = FALSE, v7 = TRUE)
+  expect_equal(dataLink, matrix(data = c(rep(1, 8760*2), rep(0, 8760*6)), ncol = 8))
+  
+  dataLink <- .initialize_dataLink_time_series(v820 = FALSE, v7 = FALSE)
+  expect_equal(dataLink, matrix(data = c(rep(1, 8760*2), rep(0, 8760*3)), ncol = 5))
+})
+
