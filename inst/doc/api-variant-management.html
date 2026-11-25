@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -405,19 +406,19 @@ at all time with:</p>
 <p>Below are listed all functions from {antaresEditObject} that can be
 used with the API. These functions will include the following badge in
 their documentation:</p>
-<p><img role="img" aria-label src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDIiIGhlaWdodD0iMjAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQW50YXJlcyBBUEk6IE9LIj48dGl0bGU+QW50YXJlcyBBUEk6IE9LPC90aXRsZT48ZmlsdGVyIGlkPSJibHVyIj48ZmVHYXVzc2lhbkJsdXIgaW49IlNvdXJjZUdyYXBoaWMiIHN0ZERldmlhdGlvbj0iMTYiLz48L2ZpbHRlcj48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9InIiPjxyZWN0IHdpZHRoPSIxMDIiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjcikiPjxyZWN0IHdpZHRoPSI3NSIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9Ijc1IiB3aWR0aD0iMjciIGhlaWdodD0iMjAiIGZpbGw9IiM2N2FjMDkiLz48cmVjdCB3aWR0aD0iMTAyIiBoZWlnaHQ9IjIwIiBmaWxsPSJ1cmwoI3MpIi8+PC9nPjxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJWZXJkYW5hLEdlbmV2YSxEZWphVnUgU2FucyxzYW5zLXNlcmlmIiB0ZXh0LXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIiBmb250LXNpemU9IjExMCI+PHRleHQgYXJpYS1oaWRkZW49InRydWUiIHg9IjM4NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii44MCIgZmlsdGVyPSJ1cmwoI2JsdXIpIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNjUwIj5BbnRhcmVzIEFQSTwvdGV4dD48dGV4dCBhcmlhLWhpZGRlbj0idHJ1ZSIgeD0iMzg1IiB5PSIxNTAiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI2NTAiPkFudGFyZXMgQVBJPC90ZXh0Pjx0ZXh0IHg9IjM4NSIgeT0iMTQwIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgZmlsbD0iI2ZmZiIgdGV4dExlbmd0aD0iNjUwIj5BbnRhcmVzIEFQSTwvdGV4dD48dGV4dCBhcmlhLWhpZGRlbj0idHJ1ZSIgeD0iODc1IiB5PSIxNTAiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjgwIiBmaWx0ZXI9InVybCgjYmx1cikiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSIxNzAiPk9LPC90ZXh0Pjx0ZXh0IGFyaWEtaGlkZGVuPSJ0cnVlIiB4PSI4NzUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjE3MCI+T0s8L3RleHQ+PHRleHQgeD0iODc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiBmaWxsPSIjZmZmIiB0ZXh0TGVuZ3RoPSIxNzAiPk9LPC90ZXh0PjwvZz48L3N2Zz4=" alt /></p>
+<p><img role="img" aria-label src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDIiIGhlaWdodD0iMjAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQW50YXJlcyBBUEk6IE9LIj48dGl0bGU+QW50YXJlcyBBUEk6IE9LPC90aXRsZT48ZmlsdGVyIGlkPSJibHVyIj48ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIxNiIvPjwvZmlsdGVyPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDI9IjAiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiYmIiIHN0b3Atb3BhY2l0eT0iLjEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3Atb3BhY2l0eT0iLjEiLz48L2xpbmVhckdyYWRpZW50PjxjbGlwUGF0aCBpZD0iciI+PHJlY3Qgd2lkdGg9IjEwMiIgaGVpZ2h0PSIyMCIgcng9IjMiLz48L2NsaXBQYXRoPjxnIGNsaXAtcGF0aD0idXJsKCNyKSI+PHJlY3Qgd2lkdGg9Ijc1IiBoZWlnaHQ9IjIwIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iNzUiIHdpZHRoPSIyNyIgaGVpZ2h0PSIyMCIgZmlsbD0iIzY3YWMwOSIvPjxyZWN0IHdpZHRoPSIxMDIiIGhlaWdodD0iMjAiIGZpbGw9InVybCgjcykiLz48L2c+PGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IlZlcmRhbmEsR2VuZXZhLERlamFWdSBTYW5zLHNhbnMtc2VyaWYiIHRleHQtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIGZvbnQtc2l6ZT0iMTEwIj48ZyB0cmFuc2Zvcm09InNjYWxlKC4xKSI+PGcgYXJpYS1oaWRkZW49InRydWUiIGZpbGw9IiMwMTAxMDEiPjx0ZXh0IHg9IjM4NSIgeT0iMTUwIiBmaWxsLW9wYWNpdHk9Ii44IiBmaWx0ZXI9InVybCgjYmx1cikiIHRleHRMZW5ndGg9IjY1MCI+QW50YXJlcyBBUEk8L3RleHQ+PHRleHQgeD0iMzg1IiB5PSIxNTAiIGZpbGwtb3BhY2l0eT0iLjMiIHRleHRMZW5ndGg9IjY1MCI+QW50YXJlcyBBUEk8L3RleHQ+PC9nPjx0ZXh0IHg9IjM4NSIgeT0iMTQwIiB0ZXh0TGVuZ3RoPSI2NTAiPkFudGFyZXMgQVBJPC90ZXh0PjwvZz48ZyB0cmFuc2Zvcm09InNjYWxlKC4xKSI+PGcgYXJpYS1oaWRkZW49InRydWUiIGZpbGw9IiMwMTAxMDEiPjx0ZXh0IHg9Ijg3NSIgeT0iMTUwIiBmaWxsLW9wYWNpdHk9Ii44IiBmaWx0ZXI9InVybCgjYmx1cikiIHRleHRMZW5ndGg9IjE3MCI+T0s8L3RleHQ+PHRleHQgeD0iODc1IiB5PSIxNTAiIGZpbGwtb3BhY2l0eT0iLjMiIHRleHRMZW5ndGg9IjE3MCI+T0s8L3RleHQ+PC9nPjx0ZXh0IHg9Ijg3NSIgeT0iMTQwIiB0ZXh0TGVuZ3RoPSIxNzAiPk9LPC90ZXh0PjwvZz48L2c+PC9zdmc+" alt /></p>
 <div id="create-an-area" class="section level3">
 <h3>Create an area</h3>
 <p>Create a new area:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">createArea</span>(<span class="at">name =</span> <span class="st">&quot;area01&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_area registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; i Command create_area registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; i Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">createArea</span>(<span class="at">name =</span> <span class="st">&quot;area02&quot;</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_area registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; i Command create_area registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; i Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">createArea</span>(<span class="at">name =</span> <span class="st">&quot;area03&quot;</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_area registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; i Command create_area registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; i Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="fu">getVariantCommands</span>()</span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -513,9 +514,9 @@ their documentation:</p>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;area04&quot;</span>, </span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">filtering =</span> <span class="fu">filteringOptions</span>(<span class="at">filter_synthesis =</span> <span class="fu">c</span>(<span class="st">&quot;hourly&quot;</span>, <span class="st">&quot;daily&quot;</span>))</span>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>)</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_area registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; i Command create_area registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; i Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">getVariantCommands</span>()</span>
 <span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -647,11 +648,11 @@ their documentation:</p>
 <span id="cb11-136"><a href="#cb11-136" tabindex="-1"></a><span class="co">#&gt; ]</span></span></code></pre></div>
 <p>You can also edit an area or remove it:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">createArea</span>(<span class="at">name =</span> <span class="st">&quot;area000&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_area registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; i Command create_area registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; i Command update_area_ui registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co"># editArea(name = &quot;area000&quot;, ...)</span></span>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">removeArea</span>(<span class="at">name =</span> <span class="st">&quot;area000&quot;</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command remove_area registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; i Command remove_area registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -666,39 +667,48 @@ their documentation:</p>
 <h3>Create a link</h3>
 <p>Create a new link between two areas like this:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">createLink</span>(<span class="at">from =</span> <span class="st">&quot;area01&quot;</span>, <span class="at">to =</span> <span class="st">&quot;area02&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_link registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">createLink</span>(<span class="at">from =</span> <span class="st">&quot;area01&quot;</span>, <span class="at">to =</span> <span class="st">&quot;area03&quot;</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_link registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="dv">2</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; [</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;     &quot;action&quot;: &quot;replace_matrix&quot;,</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;     &quot;args&quot;: {</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;       &quot;target&quot;: &quot;input/links/area01/capacities/area03_direct&quot;,</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt;       &quot;matrix&quot;: [[0],[0],[0],[0],[0],[0]] [truncated]...</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt;     }</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;   },</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt;     &quot;action&quot;: &quot;replace_matrix&quot;,</span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt;     &quot;args&quot;: {</span></span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt;       &quot;target&quot;: &quot;input/links/area01/capacities/area03_indirect&quot;,</span></span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt;       &quot;matrix&quot;: [[0],[0],[0],[0],[0],[0]] [truncated]...</span></span>
-<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt;     }</span></span>
-<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt;   }</span></span>
-<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; ]</span></span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">createLink</span>(<span class="at">from =</span> <span class="st">&quot;area01&quot;</span>, <span class="at">to =</span> <span class="st">&quot;area03&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="dv">2</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; [</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt;     &quot;action&quot;: &quot;update_area_ui&quot;,</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt;     &quot;args&quot;: [</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt;       {</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt;         &quot;area_id&quot;: &quot;area000&quot;,</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt;         &quot;area_ui&quot;: {</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt;           &quot;x&quot;: 0,</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;           &quot;y&quot;: 0,</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;           &quot;layer_x&quot;: {</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;             &quot;0&quot;: 0</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt;           },</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt;           &quot;layer_y&quot;: {</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;             &quot;0&quot;: 0</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt;           },</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt;           &quot;color_rgb&quot;: [230, 108, 44],</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt;           &quot;layer_color&quot;: {</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt;             &quot;0&quot;: &quot;230, 108, 44&quot;</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt;           }</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt;         },</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt;         &quot;layer&quot;: &quot;0&quot;</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt;       }</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt;     ]</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt;   },</span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt;     &quot;action&quot;: &quot;remove_area&quot;,</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt;     &quot;args&quot;: {</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt;       &quot;id&quot;: &quot;area000&quot;</span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt;     }</span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt;   }</span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; ]</span></span></code></pre></div>
 <p>Edit an existing link with:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">editLink</span>(</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="at">from =</span> <span class="st">&quot;area01&quot;</span>, </span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="at">to =</span> <span class="st">&quot;area02&quot;</span>,</span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="at">dataLink =</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">9</span>, <span class="dv">8760</span><span class="sc">*</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">6</span>, <span class="dv">8760</span><span class="sc">*</span><span class="dv">6</span>)), <span class="at">ncol =</span> <span class="dv">8</span>)</span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>)</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; i Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; i Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; i Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="dv">2</span>)</span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -824,7 +834,7 @@ with endpoint and no longer uses an api command ):</p>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="at">operator =</span> <span class="st">&quot;both&quot;</span>,</span>
 <span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  <span class="at">coefficients =</span> <span class="fu">c</span>(<span class="st">&quot;area01%area02&quot;</span> <span class="ot">=</span> <span class="dv">1</span>)</span>
 <span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>)</span>
-<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt; ℹ Command create_binding_constraint registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt; i Command create_binding_constraint registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -852,7 +862,7 @@ with endpoint and no longer uses an api command ):</p>
 <h3>Update settings</h3>
 <p>Update general settings:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">updateGeneralSettings</span>(<span class="at">mode =</span> <span class="st">&quot;Adequacy&quot;</span>, <span class="at">generate =</span> <span class="fu">c</span>(<span class="st">&quot;thermal&quot;</span>, <span class="st">&quot;hydro&quot;</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="dv">2</span>)</span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -872,7 +882,7 @@ with endpoint and no longer uses an api command ):</p>
 <span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a><span class="co">#&gt; ]</span></span></code></pre></div>
 <p>Update input settings:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">updateInputSettings</span>(<span class="at">import =</span> <span class="fu">c</span>(<span class="st">&quot;hydro&quot;</span>, <span class="st">&quot;thermal&quot;</span>))</span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -888,8 +898,8 @@ with endpoint and no longer uses an api command ):</p>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  <span class="at">simplex.range =</span> <span class="st">&quot;week&quot;</span>,</span>
 <span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="at">power.fluctuations =</span> <span class="st">&quot;minimize ramping&quot;</span></span>
 <span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>)</span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="dv">2</span>)</span>
 <span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -913,7 +923,7 @@ with endpoint and no longer uses an api command ):</p>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">storenewset =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="at">archives =</span> <span class="fu">c</span>(<span class="st">&quot;load&quot;</span>, <span class="st">&quot;wind&quot;</span>)</span>
 <span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>)</span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -941,7 +951,7 @@ the study.</p>
 <span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&gt; area02 &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;1&quot;</span></span></code></pre></div>
 <p>Then you can update the scenario builder itself:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">updateScenarioBuilder</span>(<span class="at">ldata =</span> my_scenario, <span class="at">series =</span> <span class="st">&quot;load&quot;</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command update_config registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co">#&gt; i Command update_config registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -957,7 +967,7 @@ the study.</p>
 <h3>Other functions</h3>
 <p>Write input time series:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">writeInputTS</span>(<span class="st">&quot;area01&quot;</span>, <span class="at">type =</span> <span class="st">&quot;solar&quot;</span>, <span class="at">data =</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">4</span>, <span class="dv">8760</span><span class="sc">*</span><span class="dv">2</span>), <span class="at">nrow =</span> <span class="dv">8760</span>))</span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&gt; i Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co">#&gt;   {</span></span>
@@ -970,7 +980,7 @@ the study.</p>
 <span id="cb28-12"><a href="#cb28-12" tabindex="-1"></a><span class="co">#&gt; ]</span></span></code></pre></div>
 <p>Write water values:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">writeWaterValues</span>(<span class="st">&quot;area01&quot;</span>, <span class="at">data =</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">365</span><span class="sc">*</span><span class="dv">101</span>), <span class="at">nrow =</span> <span class="dv">365</span>))</span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co">#&gt; ℹ Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co">#&gt; i Command replace_matrix registered, see all commands with `getVariantCommands()`</span></span>
 <span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">getVariantCommands</span>(<span class="at">last =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&gt; [</span></span>
 <span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co">#&gt;   {</span></span>

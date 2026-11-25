@@ -1319,8 +1319,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -1331,7 +1332,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -1612,9 +1613,6 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(antaresEditObject)</span></code></pre></div>
-<p>This article will present the new features in line with
-<strong>Antares v9.2</strong> (cf <a href="https://antares-simulator.readthedocs.io/en/latest/user-guide/04-migration-guides/#v920">Antares
-Simulator</a>)</p>
 <div id="create-new-study-v9.2" class="section level2">
 <h2>Create new study v9.2</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dir_path <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
@@ -1978,17 +1976,17 @@ by a dedicated function.</p>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="at">set_to_null_ntc_between_physical_out_for_first_step =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; Warning: The `set_to_null_ntc_between_physical_out_for_first_step` argument of</span></span>
 <span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; `updateAdequacySettings()` is deprecated as of antaresEditObject 2.9.2.</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter are no longer supported for an Antares version &gt;= &#39;9.2&#39;, the</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; i This parameter are no longer supported for an Antares version &gt;= &#39;9.2&#39;, the</span></span>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt;   values will be ignored.</span></span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
 <span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="fu">updateAdequacySettings</span>(<span class="at">enable_first_step =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; Warning: The `enable_first_step` argument of `updateAdequacySettings()` is deprecated as</span></span>
 <span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; of antaresEditObject 2.9.2.</span></span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter are no longer supported for an Antares version &gt;= &#39;9.2&#39;, the</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; i This parameter are no longer supported for an Antares version &gt;= &#39;9.2&#39;, the</span></span>
 <span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt;   values will be ignored.</span></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; generated.</span></span></code></pre></div>
 </div>
@@ -2020,8 +2018,8 @@ for ‘hydro final level’. This new feature is similar to <code>hl</code>
 <span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>  <span class="fu">readScenarioBuilder</span>(<span class="at">as_matrix =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt; $hfl</span></span>
 <span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;         [,1]</span></span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt; fr 0.6225864</span></span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt; it 0.7812022</span></span></code></pre></div>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt; fr 0.2004298</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt; it 0.8825063</span></span></code></pre></div>
 </div>
 
 

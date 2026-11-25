@@ -138,13 +138,17 @@ createClusterBulk <- function(cluster_object,
   invisible(res)
 }
 
-
+#' @title Internal function to create multiple clusters at once
+#'
 #' @param ... \code{list} named `list` of cluster parameter
 #' @param add_prefix \code{logical} prefix cluster name with area name
 #' @param area_zone \code{character} name of area to create cluster
 #' @param existing_params \code{list} existing cluster's parameters of study
 #' @template opts
-#' @importFrom data.table fwrite
+#'
+#' @importFrom data.table fwrite as.data.table
+#'
+#' @noRd
 .createClusterBulk <- function(...,
                                area_zone,
                                add_prefix,
@@ -202,7 +206,7 @@ createClusterBulk <- function(cluster_object,
     time_series <- list(character(0))
   
   if (NROW(list_params$time_series) == 8736) {
-    fill_mat <- as.data.table(
+    fill_mat <- data.table::as.data.table(
       matrix(
       data = rep(0, times = 24 * ncol(list_params$time_series)), 
       ncol = ncol(list_params$time_series),
@@ -211,11 +215,11 @@ createClusterBulk <- function(cluster_object,
     )
     time_series <- rbind(list_params$time_series, fill_mat)
   }else
-    time_series <-as.data.table(list_params$time_series)
+    time_series <- data.table::as.data.table(list_params$time_series)
   
   # writing series
   suppressWarnings(
-  fwrite(
+  data.table::fwrite(
     x = time_series, row.names = FALSE, col.names = FALSE, sep = "\t",
     file = file.path(opts$inputPath, "thermal", "series", 
                      tolower(area_zone), tolower(list_params$parameter$name), "series.txt")
@@ -230,15 +234,15 @@ createClusterBulk <- function(cluster_object,
   
   # default case
   if (is.null(list_params$prepro_data))
-    list_params$prepro_data <- as.data.table(
+    list_params$prepro_data <- data.table::as.data.table(
       matrix(data = c(rep(1, times = 365 * 2), 
                                    rep(0, times = 365 * 4)), 
                           ncol = 6)
     )else
-      list_params$prepro_data <- as.data.table(list_params$prepro_data)
+      list_params$prepro_data <- data.table::as.data.table(list_params$prepro_data)
   
   # writing data
-  fwrite(
+  data.table::fwrite(
     x = list_params$prepro_data, row.names = FALSE, col.names = FALSE, sep = "\t",
     file = file.path(opts$inputPath, "thermal", "prepro", 
                      tolower(area_zone), tolower(list_params$parameter$name), "data.txt")
@@ -246,15 +250,15 @@ createClusterBulk <- function(cluster_object,
   
   # default case
   if (is.null(list_params$prepro_modulation))
-    list_params$prepro_modulation <- as.data.table(
+    list_params$prepro_modulation <- data.table::as.data.table(
       matrix(data = c(rep(1, times = 365 * 24 * 3), 
                                          rep(0, times = 365 * 24 * 1)), 
                                 ncol = 4)
     )else
-      list_params$prepro_modulation <- as.data.table(list_params$prepro_modulation)
+      list_params$prepro_modulation <- data.table::as.data.table(list_params$prepro_modulation)
       
   # writing modulation
-  fwrite(
+  data.table::fwrite(
     x = list_params$prepro_modulation, row.names = FALSE, col.names = FALSE, sep = "\t",
     file = file.path(opts$inputPath, "thermal", "prepro", 
                      tolower(area_zone), tolower(list_params$parameter$name), "modulation.txt")
@@ -263,6 +267,3 @@ createClusterBulk <- function(cluster_object,
   return(list_params$parameter)
   
 }
-
-
-

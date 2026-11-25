@@ -103,6 +103,3 @@ updateOptimizationSettings(
 
 }
 }
-\seealso{
-\href{https://antares-simulator.readthedocs.io/en/latest/user-guide/solver/04-parameters/#optimization-parameters}{Optimization parameters}
-}

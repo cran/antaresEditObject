@@ -1319,8 +1319,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -1331,7 +1332,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -1612,9 +1613,6 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(antaresEditObject)</span></code></pre></div>
-<p>This article will present the new features in line with
-<strong>Antares v9.3</strong> (cf <a href="https://antares-simulator.readthedocs.io/en/latest/user-guide/04-migration-guides/#v930">Antares
-Simulator</a>)</p>
 <div id="create-new-study-v9.3" class="section level2">
 <h2>Create new study v9.3</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>dir_path <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
@@ -1859,44 +1857,44 @@ settings/generaldata.ini.</p>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="at">refreshintervalsolar =</span> <span class="dv">100</span>)</span>
 <span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshtimeseries` argument of `updateGeneralSettings()` is deprecated as</span></span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; of antaresEditObject 9.3.</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; i This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
 <span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
 <span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalload` argument of `updateGeneralSettings()` is deprecated</span></span>
 <span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; i This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
 <span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
 <span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalhydro` argument of `updateGeneralSettings()` is deprecated</span></span>
 <span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
-<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; i This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
 <span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
-<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
 <span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalwind` argument of `updateGeneralSettings()` is deprecated</span></span>
 <span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
-<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; i This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
 <span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
-<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
 <span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalthermal` argument of `updateGeneralSettings()` is</span></span>
 <span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; deprecated as of antaresEditObject 9.3.</span></span>
-<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; i This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
 <span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
-<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; generated.</span></span>
 <span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; Warning: The `refreshintervalsolar` argument of `updateGeneralSettings()` is deprecated</span></span>
 <span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; as of antaresEditObject 9.3.</span></span>
-<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; ℹ This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; i This parameter is no longer supported for Antares &gt;= 9.3; the value will be</span></span>
 <span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt;   ignored and not written to generaldata.ini</span></span>
-<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once per session.</span></span>
 <span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
 <span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt; generated.</span></span></code></pre></div>
 </div>

@@ -11,6 +11,7 @@ runSimulation(
   wait = TRUE,
   show_output_on_console = FALSE,
   parallel = TRUE,
+  api_extra_options = define_api_extra_options(),
   ...,
   opts = antaresRead::simOptions()
 )
@@ -31,6 +32,8 @@ it on the R console.}
 \item{parallel}{Logical. If \code{TRUE} the ANTARES simulation will be run in parallel mode (Work
 only with ANTARES v6.0.0 or more). In that case, the number of cores used by the simulation
 is the one set in advanced_settings/simulation_cores (see ANTARES interface).}
+
+\item{api_extra_options}{Character. In API mode, a list containing the elements to configure the run. Please check define_api_extra_options().}
 
 \item{...}{Additional arguments (API only), such as \code{nb_cpu}, \code{time_limit}, ...
 See API documentation for all available options.}

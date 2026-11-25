@@ -18,8 +18,6 @@ knitr::opts_chunk$set(
 library(antaresEditObject)
 ```
 
-This article will present the new features in line with **Antares v9.2** (cf  [Antares Simulator](https://antares-simulator.readthedocs.io/en/latest/user-guide/04-migration-guides/#v920))
-
 ## Create new study v9.2
 
 ```{r init}

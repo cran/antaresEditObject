@@ -1,4 +1,4 @@
-## ----include = FALSE----------------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -117,7 +117,7 @@ tab <- readInputTS(st_storage = "all",
                    showProgress = FALSE)
 rmarkdown::paged_table(head(tab))
 
-## ----message=FALSE------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 # Create 
 createClusterST(area = "fr",
                 cluster_name = "Additional_Properties",
@@ -173,7 +173,7 @@ editClusterST (area = "fr",
                  )))
 
 
-## ----message=FALSE------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 # Create
 good_ts <- matrix(0.7, nrow = 8760, ncol = 1)
 createClusterST(area = "fr",
@@ -219,7 +219,7 @@ editClusterST (area = "fr",
 #Read
 res=read_storages_constraints()
 
-## ----echo=FALSE, message=FALSE, warning=FALSE---------------------------------
+## ---- echo=FALSE, message=FALSE, warning=FALSE--------------------------------
 library(data.tree)
 as.Node(res)
 
